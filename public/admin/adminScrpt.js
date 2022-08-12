@@ -1,128 +1,120 @@
-function cityandprice(){ 
-    $("#cityPriceModule").html('<div class="col-md-10  col-md-offset-1 ">\
+function newChannelInit(){
+    $("#newChannel").html('<div  class="col-xs-12 col-sm-12">\
     <div class="panel panel-success">\
           <div class="panel-heading">\
-                <h3 class="panel-title">City And Price List</h3>\
+                <h3 class="panel-title">Register New Partner Channel</h3>\
           </div>\
-          <div id="cityPriceList" class="panel-body">\
-            <div class="row">\
-                <div class=" col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">\
-                    <div class="form-group" style="width: 75%;">\
-                        <select name="" id="cityList" class="form-control" onchange="getCityPriceList()" >\
-                        <option value="">Select City</option>\
-                        </select>\
-                    </div>\
-                    <button type="button" class="btn btn-primary" onclick="creatNewCityInit()">Create New City</button>\
+          <div class="panel-body">\
+                <div class="form-group">\
+                    <label>Username</label>\
+                        <input type="text"  id="regEmail" class="form-control" placeholder="Email ie hkdhkfhs@gmail.com">\
                 </div>\
-            </div>\
-         </div>\
+                <div class="form-group">\
+                    <label>Password</label>\
+                        <input type="password"  id="regPassword" class="form-control" placeholder="6 to 18 Chracter">\
+                </div>\
+                <div class="form-group">\
+                    <label>Full Name</label>\
+                        <input type="text"  id="regUserName" class="form-control" placeholder="ei: Sushanta Majumder">\
+                </div>\
+                <div class="form-group">\
+                    <label>Address</label>\
+                       <textarea id="regAddress" class="form-control" rows="3" ></textarea>\
+                </div>\
+                <div class="form-group">\
+                    <label>Mobile Number</label>\
+                        <input type="number"  id="regMobile" class="form-control" placeholder=" 10 Digit Number">\
+                </div>\
+                <div class="form-group">\
+                                <label>Pan Number</label>\
+                                    <input type="text"  id="regPan" class="form-control">\
+                            </div>\
+                <div class="form-group">\
+                    <label>Channel</label>\
+                        <select id="channelRoot" class="form-control" required="required">\
+                            <option value="">Select Channel</option>\
+                            <option value="A">A</option>\
+                            <option value="B">B</option>\
+                            <option value="C">C</option>\
+                            <option value="D">D</option>\
+                            <option value="E">E</option>\
+                        </select>\
+                </div>\
+                <button onclick="createNewChannel()" type="button" class="btn btn-primary">Register</button>\
+          </div>\
     </div>\
 </div>')
-cityList()
 }
 
+function createNewChannel(){
+    var regEmail=$("#regEmail").val().replace(/\s/g, '');
+    var regPassword=$("#regPassword").val();
+    var regUserName=$("#regUserName").val();
+    var regAddress=$("#regAddress").val();
+    var regMobile=$("#regMobile").val();
+    var channelRoot=$("#channelRoot").val();
+    var regPan=$("#regPan").val().toUpperCase().replace(/\s/g, '');
 
-function cityList(){
-    $.post('/admin/cityList',{},function(data){
-       data.forEach(val => {
-           $("#cityList").append('<option value="'+val.city+'">'+val.city+'</option>')
-       }); 
-    })
-}
+    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/; 
 
+   
 
-function creatNewCityInit(){
-    $("#cityPriceList").html('<div class=" col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">\
-                <div class="col-sm-6">\
-                    <label>City Name :</label>\
-                    <input type="text"  id="city" class="form-control" value="" placeholder="City Name"  >\
-                </div>\
-                <div class="col-sm-6">\
-                    <label>In Which Branch :<button type="button" class="btn btn-xs btn-success" onclick="creatNewBranchInit()">Create New Branch</button></label>\
-                    <select name="" id="branch" class="form-control" >\
-                    <option value="">Select Branch</option>\
-                    </select>\
-                </div>\
-                <div class="col-sm-2" style="margin-top: 20px;">\
-                <button type="button" class="btn btn-success" onclick="creatNewCity()">Create</button>\
-                </div>\
-            </div>');
-            branchList();
-}
+      if (reg.test(regEmail) == false) 
+          {
+              alert('Invalid Email Address');
+              $("#regEmail").focus();
+              return 
+          }
+          if(regPassword.length < 6){
+            alert('Password Must be 6 to 18 charecter');
+            $("#regPassword").focus()
+            return
+        } 
 
-function creatNewCity(){
-    var data = $("#branch").val().toString().split(",");
-    var branch=data[0];
-    var state=data[1];
-    var country=data[2];
-    var city =$("#city").val().trim();
-    if(city){
+           if(regUserName.length < 2){
+            alert('Enter Valid Name');
+            $("#regUserName").focus()
+            return
+           }
+         
 
-        $.post('/admin/newCity',{
-            branch:branch,
-            country:country,
-            state:state,
-            city:city
-        },function(res){
-            cityandprice();
-        })
+         if(regMobile.length != 10){
+            alert('Enter Valid Mobile Number');
+            $("#regMobile").focus()
+            return
+         }
+         if(regPan.length != 10){
+            alert('Enter Valid PAN Number');
+            $("#regPan").focus()
+            return
+         }
+         if(!channelRoot.length){
+            alert('Select Root Channel');
+            $("#channelRoot").focus()
+            return
+         }
 
-    }else{
-        alert("enter city")
-    }
+         ///////Check Exist//////////
 
+         $.post('/admin/checkuserexist',{channelRoot:channelRoot,regPan:regPan,regEmail:regEmail},function(data){
+           if(!data){
+            /////////Save New Partner//////
+            $.post('/admin/newPartner',{
+                regEmail:regEmail,
+                regPassword:regPassword,
+                regUserName:regUserName,
+                regAddress:regAddress,
+                regMobile:regMobile,
+                channelRoot:channelRoot,
+                regPan:regPan
+            },function(reg){
+                alert("Registration  Success")
+            })
 
-}
-
-function branchList(){
-    $.post('/admin/branch',{},function(data){
-        console.log(data)
-       data.forEach(val => {
-           $("#branch").append('<option value="'+val.branch+','+val.state+','+val.country+'">'+val.branch+'</option>')
-       }); 
-    })
-}
-
-function creatNewBranchInit(){
-    $("#cityPriceList").html('<div class=" col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">\
-                <div class="col-sm-12">\
-                    <label>Branch Name :</label>\
-                    <input type="text"  id="branchName" class="form-control" value="" placeholder="Branch Name"  >\
-                </div>\
-                <div class="col-sm-12">\
-                    <label>State :</label>\
-                    <input type="text"  id="stateName" class="form-control" value="West Bengal" placeholder="State Name"  >\
-                </div>\
-                <div class="col-sm-12">\
-                    <label>Country :</label>\
-                    <input type="text"  id="countryName" class="form-control" value="India"  >\
-                </div>\
-                <div class="col-sm-12" style="margin-top: 20px;">\
-                <button type="button" class="btn btn-success" onclick="creatNewBranch()">Create</button>\
-                </div>\
-            </div>')
-}
-
-
-
-function creatNewBranch(){
-    var branchName=$("#branchName").val().trim(); 
-    var stateName=$("#stateName").val().trim(); 
-    var countryName=$("#countryName").val().trim(); 
-    if(branchName && stateName && countryName){
-        $.post('/admin/addNewBranch',{
-            branch:branchName,
-            country:countryName,
-            state:stateName,
-        },function(data){
-           if(data=="ok"){
-            creatNewCityInit();
            }else{
-               alert("Branch Exist")
-           } 
-        })
-    }else{
-        alert("Enter Branch")
-    }
-    
+            alert("Already Register With Us")
+           }
+         })
+
+
 }

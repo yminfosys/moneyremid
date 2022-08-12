@@ -5,26 +5,24 @@ const counterSchema = new mongoose.Schema({
     value:Number
 });
 
-var countermodul = mongoose.model('ftcounters', counterSchema);
+var countermodul = mongoose.model('paamotocounter', counterSchema);
 
 const userSchema = new mongoose.Schema({ 
     userName:String,
     userID:Number,
-    userPhoto:String,
-    email:String,
-    password:String,
-    mobile:Number,
     rootID:String,
-    city:String,
-    country:String,
-    state:String,
+    password:String,
+    email:String,
     address:String,
-    postCode:String,
-    status:{ type: String, default: "New" },
+    mobile:String,
+    panNo:String,
+    adharNo:String,
     regdate: { type: Date, default: Date.now },
-    rating:{type:Number, default:0}
+    lastlogin: { type: Date}
 });
-var usermodul = mongoose.model('ftusers', userSchema);
+var usermodul = mongoose.model('paamotouser', userSchema);
+
+
 
 
 
@@ -33,6 +31,5 @@ var usermodul = mongoose.model('ftusers', userSchema);
 module.exports={
     counter:countermodul,
     user:usermodul,
-    
     
 }

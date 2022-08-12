@@ -5,11 +5,10 @@ const mongojs = require('mongojs');
 var dotenv=require('dotenv').config();
 
 
-const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/paamoto";
+const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/moneyremed";
 
 const connectDB = async () => {
   try {
-    
     await mongoose
       .connect(uri, {
         autoIndex: false,
@@ -26,6 +25,8 @@ const connectDB = async () => {
     return error;
   }
 };
+
+
 
 
 // async function closeDB() {
