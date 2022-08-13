@@ -1,9 +1,26 @@
 $( document ).ready(function() {
     var allredyloginuserID=$("#allredyloginuserID").val();
     if(allredyloginuserID){
+
+        $("#UserPanel").css({"display":"block"});
+        $("#UserPanel").css({"display":"block"});
+        $("#dashHome").css({"display":"block"});
+        $("#logout").css({"display":"block"});
+
         $("#loginPanel").css({"display":"none"});
+        $("#login").css({"display":"none"});
+        $("#regit").css({"display":"none"});
     }else{
         $("#loginPanel").css({"display":"block"});
+        $("#login").css({"display":"block"});
+        $("#regit").css({"display":"block"});
+
+        $("#logout").css({"display":"none"});
+        $("#logout").css({"display":"none"});
+        $("#dashHome").css({"display":"none"});
+        $("#UserPanel").css({"display":"none"});
+        
+        
     }
 
 })
@@ -127,4 +144,59 @@ function searchdown(){
 
   }
   
+
+
+  function loginProcess(){
+    var loginEmail=$("#loginEmail").val().replace(/\s/g, '');
+    var loginPassword=$("#loginPassword").val().trim();
+   
+
+    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/; 
+
+   
+
+      if (reg.test(loginEmail) == false) 
+          {
+              alert('Invalid Email Address');
+              $("#loginEmail").focus();
+              return 
+          }
+          if(loginPassword < 6){
+            alert('Password Must be 6 to 18 charecter');
+            $("#loginPassword").focus()
+            return
+        } 
+
+        $.post('/user/loginUser',{loginPassword:loginPassword,loginEmail:loginEmail},function(data){
+            if(data){
+                $("#UserPanel").css({"display":"block"});
+                $("#UserPanel").css({"display":"block"});
+                $("#dashHome").css({"display":"block"});
+                $("#logout").css({"display":"block"});
+
+                $("#loginPanel").css({"display":"none"});
+                $("#login").css({"display":"none"});
+                $("#regit").css({"display":"none"});
+            }else{
+                alert("Worng Credential")
+            }
+        })
+
+  }
+
+  function logout(){
+    $.post('/user/logout',{},function(data){
+        if(data){
+            $("#loginPanel").css({"display":"block"});
+            $("#login").css({"display":"block"});
+            $("#regit").css({"display":"block"});
+    
+            $("#logout").css({"display":"none"});
+            $("#logout").css({"display":"none"});
+            $("#dashHome").css({"display":"none"});
+            $("#UserPanel").css({"display":"none"});
+        }
+    })
+
+  }
    
