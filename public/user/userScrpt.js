@@ -23,7 +23,6 @@ var timerr
 function searchdown(){
     clearTimeout(timerr);
   }
-
   function searchup(){
     clearTimeout(timerr);
     timerr=setTimeout(function(){

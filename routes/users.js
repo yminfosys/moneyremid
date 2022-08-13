@@ -82,23 +82,25 @@ router.post('/checkuserexist', async function(req, res, next) {
 
 router.post('/newPartner', async function(req, res, next) {
   try {
-  
-  auto_incriment.auto_incriment("userID").then(async function(inc_val){
-    await dbCon.connectDB()
-    const user= await db.user({
-    userName:req.body.regUserName,
-    userID:inc_val,
-    rootID:req.body.channelRoot,
-    password:req.body.regPassword,
-    email:req.body.regEmail,
-    address:req.body.regAddress,
-    mobile:req.body.regMobile,
-    panNo:req.body.regPan
-  })
-  await user.save();
-  res.json(user)
-  //console.log(req.body)
-  await dbCon.closeDB();
+  bcrypt.hash(req.body.regPassword, saltRounds, function(err, hash) {
+    auto_incriment.auto_incriment("userID").then(async function(inc_val){
+        await dbCon.connectDB()
+        const user= await db.user({
+        userName:req.body.regUserName,
+        userID:inc_val,
+        rootID:req.body.channelRoot,
+        password:hash,
+        email:req.body.regEmail,
+        address:req.body.regAddress,
+        mobile:req.body.regMobile,
+        panNo:req.body.regPan
+      })
+      await user.save();
+      res.json(user)
+      //console.log(req.body)
+      await dbCon.closeDB();
+
+      })
 })
   
 } catch (error) {
