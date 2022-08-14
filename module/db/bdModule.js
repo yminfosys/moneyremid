@@ -5,7 +5,7 @@ const counterSchema = new mongoose.Schema({
     value:Number
 });
 
-var countermodul = mongoose.model('paamotocounter', counterSchema);
+var countermodul = mongoose.model('moneycounter', counterSchema);
 
 const userSchema = new mongoose.Schema({ 
     userName:String,
@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     regdate: { type: Date, default: Date.now },
     lastlogin: { type: Date}
 });
-var usermodul = mongoose.model('paamotouser', userSchema);
+var usermodul = mongoose.model('moneyusers', userSchema);
 
 
 
