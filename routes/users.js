@@ -19,6 +19,20 @@ const saltRounds = 10;
 
 
 /* GET users listing. */
+
+router.post('/test', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+
+
+    await dbCon.closeDB();
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+  
+});
+
 router.get('/', async function(req, res, next) {
   try {
     await dbCon.connectDB();
@@ -56,23 +70,6 @@ router.post('/loginUser', async function(req, res, next) {
   }
   
 });
-
-
-
-
-router.post('/test', async function(req, res, next) {
-  try {
-    await dbCon.connectDB();
-
-
-    await dbCon.closeDB();
-  }catch (error) {
-    console.log(error);
-    return error;
-  }
-  
-});
-
 
 router.post('/checkSponsor', async function(req, res, next) {
   try {
