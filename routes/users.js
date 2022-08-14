@@ -55,14 +55,19 @@ router.post('/loginUser', async function(req, res, next) {
     const user= await db.user.findOne({email:req.body.loginEmail})
     console.log(user);
     await dbCon.closeDB();
-    bcrypt.compare(req.body.loginPassword,user.password, async function(err,match){
-      if(match){
-        res.cookie("userID", user.userID, { maxAge:  24 * 60 * 60 * 1000 });
-        res.send("ok");
-      }else{
-        res.send(null);
-      }
-    })
+    if(user){
+      bcrypt.compare(req.body.loginPassword,user.password, async function(err,match){
+        if(match){
+          res.cookie("userID", user.userID, { maxAge:  24 * 60 * 60 * 1000 });
+          res.send("ok");
+        }else{
+          res.send(null);
+        }
+      })
+    }else{
+      res.send(null);
+    }
+    
     
   }catch (error) {
     console.log(error);
