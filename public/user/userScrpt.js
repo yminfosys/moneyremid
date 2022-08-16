@@ -205,86 +205,32 @@ function searchdown(){
 
   function getUserprofile(userID){
     console.log(userID)
-    profile();
+    profile(userID);
   }
 
-  function profile(){
-    
-                $("#UserPanel").html('<div  id="sidebar-waper">\
-                <div class="togle-btn" onclick="sidebartoggle()">\
-                    <span></span>\
-                    <span></span>\
-                    <span></span>\
-                </div>\
-                <ul class="sidebar-menue">\
-                <li onclick="profile()" class="Dashboard" style="border-bottom: 1px solid #FFF;">\
-                    <div style="font-size: 25px; text-align: center;"><i class="fa fa-user-circle" aria-hidden="true"></i></div>\
-                    <div id="userContent" class="text-center">Sukanta Sardar<br>ID: 001</div>\
-                </li>\
-                <li class="Recharge">\
-                <a href="#RechargeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">\
-                    <i class="fa fa-cubes" aria-hidden="true"></i>\
-                    <span>My Network</span>\
-                </a>\
-                <ul class="collapse " id="RechargeSubmenu">\
-                    <li ><a href="#">NetWork Flow </a></li>\
-                    <li><a href="#">Break Info</a></li>\
-                    </ul>\
-                </li>\
-                <li  class="Myrides">\
-                    <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">\
-                        <i class="fa fa-money" aria-hidden="true"></i>\
-                        <span>Payment</span>\
-                    </a>\
-                </li>\
-                <li   class="Myrides">\
-                    <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">\
-                        <i class="fa fa-taxi" aria-hidden="true"></i>\
-                        <span>Ledger</span>\
-                    </a>\
-                </li>\
-                <li class="freekm"><a href="#">\
-                    <i class="fa fa-gift" aria-hidden="true"></i>\
-                    <span>Transaction Details</span>\
-                    </a>\
-                </li>\
-                <li class="Notification"><a href="#">\
-                    <i class="fa fa-bell" aria-hidden="true"></i>\
-                    <span>Notification</span>\
-                    </a>\
-                </li>\
-                <li  class="Notification"><a href="#">\
-                    <i class="fa fa-cog" aria-hidden="true"></i>\
-                    <span>Support</span>\
-                    </a>\
-                </li>\
-                <li onclick="logout()" class="Logout">\
-                    <a href="#">\
-                        <i class="fa fa-sign-out" aria-hidden="true"></i>\
-                        <span> Logout</span>\
-                        </a>\
-                </li>\
-                </ul>\
-            </div>\
-            <div id="main-content">\
-                <div class="col-xs-6 col-sm-6 col-xs-offset-3 col-sm-offset-3">\
-                    <div class="thumbnail">\
-                        <img data-src="#" alt="">\
-                        <div class="caption">\
-                            <h3>Sukanta Sardar</h3>\
-                            <p>\
-                            My SponsorID: 001\
-                            <hr>\
-                            </p>\
-                            <p>Mobile Number: 8509239522</p>\
-                            <p>Address: Oxford Square</p>\
-                            <p>PAN: CHCPS6939R</p>\
-                            <p>\
-                                <a href="#" class="btn btn-primary">Edit Profile</a>\
-                            </p>\
-                        </div>\
+  function profile(userID){
+    $.post('/user/userProfile',{userID:userID},function(user){
+        $("#userContent").html(''+user.userName+'<br>ID: '+user.userID+'')
+        $("#main-content").html('<div class="col-xs-6 col-sm-6 col-xs-offset-3 col-sm-offset-3">\
+                <div class="thumbnail">\
+                    <img data-src="#" alt="">\
+                    <div class="caption">\
+                        <h3>'+user.userName+'</h3>\
+                        <p>\
+                           My SponsorID: '+user.userID+'\
+                           <hr>\
+                        </p>\
+                        <p>Mobile Number: '+user.mobile+'</p>\
+                        <p>Address: '+user.address+'</p>\
+                        <p>PAN: '+user.panNo+'</p>\
+                        <p>\
+                            <a href="#" class="btn btn-primary">Edit Profile</a>\
+                        </p>\
                     </div>\
                 </div>\
             </div>')
+    })
+    
+                
   }
    

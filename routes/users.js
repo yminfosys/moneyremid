@@ -137,12 +137,30 @@ router.post('/newPartner', async function(req, res, next) {
 
 
 
+router.post('/userProfile', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.findOne({userID:req.body.userID})
+    await dbCon.closeDB();
+    res.json(user)
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+  
+});
+
+
+
 ////////Profile/////////////
 router.post('/logout', async function(req, res, next) {
   res.clearCookie("userID");
   res.send("ok")
 
 })
+
+
+
 
 ////////Profile/////////////
 
