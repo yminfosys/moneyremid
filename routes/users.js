@@ -47,8 +47,6 @@ router.get('/', async function(req, res, next) {
 });
 
 
-
-
 router.post('/loginUser', async function(req, res, next) {
   try {
     await dbCon.connectDB();
@@ -59,7 +57,7 @@ router.post('/loginUser', async function(req, res, next) {
       bcrypt.compare(req.body.loginPassword,user.password, async function(err,match){
         if(match){
           res.cookie("userID", user.userID, { maxAge:  24 * 60 * 60 * 1000 });
-          res.send("ok");
+          res.json(user);
         }else{
           res.send(null);
         }
@@ -148,6 +146,23 @@ router.post('/logout', async function(req, res, next) {
 
 ////////Profile/////////////
 
+router.get('/resetpassword', async function(req, res, next) {
+  
+  bcrypt.hash(req.query.paw, saltRounds, async function(err, hash) {
+    await dbCon.connectDB();
+    const user= await db.user.findOneAndUpdate({mobile:req.query.mobile},{$set:{password:hash}});
+    await dbCon.closeDB();
+
+    if(user){
+      res.send("success")
+    }else{
+      res.send("error")
+    }
+
+  })
+  
+  
+})
 
 
 
