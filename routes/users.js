@@ -121,9 +121,10 @@ router.post('/newPartner', async function(req, res, next) {
         panNo:req.body.regPan
       })
       await user.save();
+      await dbCon.closeDB();
       res.json(user)
       //console.log(req.body)
-      await dbCon.closeDB();
+      
 
       })
 })
@@ -137,10 +138,49 @@ router.post('/newPartner', async function(req, res, next) {
 
 
 
-router.post('/userProfile', async function(req, res, next) {
+
+router.post('/completeReg', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+  const user= await db.user.findOneAndUpdate({userID:req.body.userID},{$set:{
+    adharNo:req.body.Aadhar,
+    westrenUnionUser:req.body.wuID,
+    westrenUnionPass:req.body.wuPsd,
+    BinanceUser:req.body.BinanceID,
+    BinancePass:req.body.BinancePsd,
+    EmlID:req.body.EmlID,
+    EmlPsd:req.body.EmlPsd,
+    BankDelais:req.body.BankDelais
+  }});
+  await dbCon.closeDB();
+  res.json(user)
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+  
+});
+
+
+router.post('/GetUser', async function(req, res, next) {
   try {
     await dbCon.connectDB();
     const user= await db.user.findOne({userID:req.body.userID})
+    await dbCon.closeDB();
+    res.json(user)
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+  
+});
+
+
+
+router.post('/userProfile', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.findOne({userID:req.cookies.userID})
     await dbCon.closeDB();
     res.json(user)
   }catch (error) {
@@ -181,6 +221,22 @@ router.get('/resetpassword', async function(req, res, next) {
   
   
 })
+
+////////Get Tree info/////////////
+router.post('/getTree', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.findOne({userID:req.body.id});
+    const Mytree=await db.user.find({rootID: { $regex: '.*' + user.rootID + '.*' , $options: 'i' } } );
+    await dbCon.closeDB();
+    console.log("My Tree",Mytree)
+    res.send({user:user,Mytree:Mytree})
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+})
+
 
 
 

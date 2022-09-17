@@ -43,15 +43,17 @@
                 <ul class="nav navbar-nav navbar-right">
 
                     <li id="dashHome" class="active"><a href="#"><i class="fa fa-home" aria-hidden="true"></i> Home <span class="sr-only">(current)</span></a></li>
-                    <li id="logout" onclick="logout()"><a href="#" ><i class="fa fa-amazon" aria-hidden="true"></i> Logout</a></li>
+                    <li id="logout" onclick="logout()"><a href="#" ><i class="fa fa-user" aria-hidden="true"></i> Logout</a></li>
 
                     <li id="login" class="active" onclick="loginClick()"><a href="#" ><i class="fa fa-amazon" aria-hidden="true"></i> Login</a></li>
-                    <li id="regit" onclick="regClick()"><a href="#" ><i class="fa fa-amazon" aria-hidden="true"></i> Register</a></li>
+                    <li id="regit" onclick="regClick()"><a href="#" ><i class="fa fa-user" aria-hidden="true"></i> Register</a></li>
                     
                 </ul>
               </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
           </nav>
+
+
 
         <!-- check alredy login -->
         <input type="hidden" id="allredyloginuserID" value="<%=allredylogin%>">
@@ -141,10 +143,7 @@
                                 <label>Column</label>
                                     <select id="regColumn" class="form-control" required="required">
                                         <option value="">Select Column</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
+                                        
                                     </select>
                                     
                             </div>
@@ -156,6 +155,72 @@
                 
             </div>
         </div>
+
+        <div id="CompleteRegistration">
+            <div  style="margin-top:3vh;" class="row">
+                <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">
+                    <div class="panel panel-success">
+                          <div class="panel-heading">
+                                <h3 class="panel-title">Almost Done</h3>
+                          </div>
+                          <div class="panel-body">
+
+                            <div class="form-group">
+                                <label>Aadhar Number</label>
+                                    <input type="text"  id="Aadhar" class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Western Union ID</label>
+                                    <input type="text"  id="wuID" class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Western Union Password</label>
+                                    <input type="text"  id="wuPsd" class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Binance ID</label>
+                                    <input type="text"  id="BinanceID" class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Binance Password</label>
+                                    <input type="text"  id="BinancePsd" class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email ID</label>
+                                    <input type="text"  id="EmlID" class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email Password</label>
+                                    <input type="text"  id="EmlPsd" class="form-control" >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Bank Details</label> 
+                                <textarea  id="BankDelais" class="form-control" rows="3" placeholder="Name , A/c, IFSC, Bank Nane"></textarea>
+                                    
+                            </div>
+
+                            <button onclick="completeReg()" type="button" class="btn btn-primary">Submit</button>
+
+
+                          </div>
+
+                    </div>  
+                </div>
+            </div>            
+        </div>
+
+        <script>
+            for(var i=1; i<250; i++){
+               $("#regColumn").append('<option value="'+i+'">'+i+'</option>') 
+            }
+        </script>
 
 
         <!-- User Register End-->
@@ -175,15 +240,12 @@
                     <div style="font-size: 25px; text-align: center;"><i class="fa fa-user-circle" aria-hidden="true"></i></div>
                     <div id="userContent" class="text-center">Sukanta Sardar<br>ID: 001</div>
                 </li>
-                <li class="Recharge">
-                  <a href="#RechargeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <li onclick="myTree('<%=allredylogin%>')" class="Recharge">
+                  <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <i class="fa fa-cubes" aria-hidden="true"></i>
-                      <span>My Network</span>
+                      <span>My Tree</span>
                   </a>
-                  <ul class="collapse " id="RechargeSubmenu">
-                      <li ><a href="#">NetWork Flow </a></li>
-                      <li><a href="#">Break Info</a></li>
-                      </ul>
+                  
                 </li>
                 <li  class="Myrides">
                     <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
@@ -221,25 +283,37 @@
                 </ul>
             </div>
             <div id="main-content">
-                <!-- <div class="col-xs-6 col-sm-6 col-xs-offset-3 col-sm-offset-3">
-                    <div class="thumbnail">
-                        <img data-src="#" alt="">
-                        <div class="caption">
-                            <h3>Sukanta Sardar</h3>
-                            <p>
-                               My SponsorID: 001
-                               <hr>
-                            </p>
-                            <p>Mobile Number: 8509239522</p>
-                            <p>Address: Oxford Square</p>
-                            <p>PAN: CHCPS6939R</p>
-                            <p>
-                                <a href="#" class="btn btn-primary">Edit Profile</a>
-                            </p>
-                        </div>
+                <div class="container-fluid">
+                    <div id="userProfile" class="row">
                     </div>
-                </div> -->
-                
+                        <div id="mytree" style="display: none;" class="panel panel-info">
+                              <div class="panel-heading">
+                                    <h3 class="panel-title">Employee Tree</h3>
+                              </div>
+                              <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <ul id="treeHead" class="list-group">
+                                            <li class="list-group-item active">
+                                                <span class="badge">100</span>
+                                                Sukanta Sardar
+                                            </li>
+                                        </ul>
+                                        <ul id="treeList" class="list-group" style="height: 50vh; overflow-y: auto;" >
+                                            <!-- <li onclick="myChildTree(10)" style="cursor: pointer;" class="list-group-item">Ankush Kar ID - 10 <br>Ads:</li>
+                                            <li onclick="myChildTree(10)" style="cursor: pointer;" class="list-group-item">Ankush Kar ID - 10</li>
+                                            <li onclick="myChildTree(10)" style="cursor: pointer;" class="list-group-item">Ankush Kar ID - 10</li>
+                                            <li onclick="myChildTree(10)" style="cursor: pointer;" class="list-group-item">Ankush Kar ID - 10</li> -->
+                                        </ul>
+                                    </div>
+                                </div>
+                               </div>
+                        </div>
+                </div>
+                        
+                    
+
+            </div>
             </div>
             
         </div>

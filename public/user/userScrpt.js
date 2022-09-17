@@ -144,6 +144,40 @@ function searchdown(){
 
 
   }
+
+  function completeReg(){
+    var Aadhar=$("#Aadhar").val().replace(/\s/g, '');
+    var wuID=$("#wuID").val().replace(/\s/g, '');
+    var wuPsd=$("#wuPsd").val().replace(/\s/g, '');
+    var BinanceID=$("#BinanceID").val().replace(/\s/g, '');
+    var BinancePsd=$("#BinancePsd").val().replace(/\s/g, '');
+    var EmlID=$("#EmlID").val().replace(/\s/g, '');
+    var EmlPsd=$("#EmlPsd").val().replace(/\s/g, '');
+    var BankDelais=$("#BankDelais").val();
+    var userID=$("#allredyloginuserID").val();
+
+    if(Aadhar && wuID && wuPsd &&  BinanceID && BinancePsd && EmlID && EmlPsd && BankDelais){
+        $.post('/user/completeReg',{
+            Aadhar:Aadhar,
+            wuID:wuID,
+            wuPsd:wuPsd,
+            BinanceID:BinanceID,
+            BinancePsd:BinancePsd,
+            EmlID:EmlID,
+            EmlPsd:EmlPsd,
+            BankDelais:BankDelais,
+            userID:userID
+        },function(user){
+            if(user){
+                $("#CompleteRegistration").css({"display":"none"});
+                profile();
+            }
+        })
+    }else{
+        alert("Complete From ")
+    }
+
+  }
   
 
 
@@ -204,14 +238,26 @@ function searchdown(){
   }
 
   function getUserprofile(userID){
-    console.log(userID)
-    profile(userID);
+    $.post('/user/GetUser',{userID:userID},function(user){
+        if(user.adharNo){
+            $("#CompleteRegistration").css({"display":"none"});
+            profile();
+        }else{
+            $("#CompleteRegistration").css({"display":"block"});
+            
+        }
+    });
+    
   }
 
-  function profile(userID){
-    $.post('/user/userProfile',{userID:userID},function(user){
+  function profile(){
+    $.post('/user/userProfile',{},function(user){
+        $("#userProfile").css({"display":"block"});
+
+        $("#mytree").css({"display":"none"});
+
         $("#userContent").html(''+user.userName+'<br>ID: '+user.userID+'')
-        $("#main-content").html('<div class="col-xs-6 col-sm-6 col-xs-offset-3 col-sm-offset-3">\
+        $("#userProfile").html('<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-lg-offset-3 col-md-offset-3">\
                 <div class="thumbnail">\
                     <img data-src="#" alt="">\
                     <div class="caption">\
@@ -229,8 +275,24 @@ function searchdown(){
                     </div>\
                 </div>\
             </div>')
-    })
-    
-                
+
+
+    });      
+  }
+
+  function myTree(id){
+    $.post('/user/getTree',{id:id},function(data){
+        $("#mytree").css({"display":"block"});
+        $("#userProfile").css({"display":"none"});
+        $("#treeHead").html(' <li class="list-group-item active">\
+        <span class="badge">'+data.Mytree.length+'</span>\
+        '+data.user.userName+'\
+        </li>');
+        $("#treeList").html("")
+        data.Mytree.forEach(val => {
+            $("#treeList").append('<li onclick="myTree('+val.userID+')" style="cursor: pointer;" class="list-group-item">'+val.userName+' ID - '+val.userID+'<br>'+val.address+'</li>') 
+        });
+    });
   }
    
+  
