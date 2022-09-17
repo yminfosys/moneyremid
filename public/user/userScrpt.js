@@ -232,6 +232,7 @@ function searchdown(){
             $("#logout").css({"display":"none"});
             $("#dashHome").css({"display":"none"});
             $("#UserPanel").css({"display":"none"});
+            $("#CompleteRegistration").css({"display":"none"});
         }
     })
 
