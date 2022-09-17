@@ -65,4 +65,19 @@ router.post('/newPartner', async function(req, res, next) {
 })
 
 
+
+router.post('/userDetails', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+  const user= await db.user.find();
+  await dbCon.closeDB();
+  res.json(user)
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+  
+});
+
+
 module.exports = router;

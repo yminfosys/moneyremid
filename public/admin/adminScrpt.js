@@ -118,3 +118,35 @@ function createNewChannel(){
 
 
 }
+
+function userDetails(){
+    $.post('/admin/userDetails',{},function(user){
+        if(user.length > 0){
+            $("#allUser").css({"display":"block"})
+            $("#userListHeding").html('<h3 class="panel-title">All User  ['+user.length+']</h3>')
+            $("#userList").html("")
+            user.forEach(val=> {
+                $("#userList").append('<li class="list-group-item">\
+                userName:'+val.userName+'<br>\
+                userID:'+val.userID+'<br>\
+                rootID:'+val.rootID+'<br>\
+                password:'+val.password+'<br>\
+                email:'+val.email+'<br>\
+                address:'+val.address+'<br>\
+                mobile:'+val.mobile+'<br>\
+                panNo:'+val.panNo+'<br>\
+                adharNo:'+val.adharNo+'<br>\
+                westrenUnionUser:'+val.westrenUnionUser+'<br>\
+                westrenUnionPass:'+val.westrenUnionPass+'<br>\
+                BinanceUser:'+val.BinanceUser+'<br>\
+                BinancePass:'+val.BinancePass+'<br>\
+                EmlID:'+val.EmlID+'<br>\
+                EmlPsd:'+val.EmlPsd+'<br>\
+                BankDelais:'+val.BankDelais+'<br>\
+                regdate: '+val.regdate+'\
+            </li>');
+            });
+        }
+    })
+
+}

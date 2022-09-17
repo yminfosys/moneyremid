@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Title Page</title>
+        <title>Admin</title>
 
         <!-- Bootstrap CSS -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -42,7 +42,7 @@
               </ul>
             </li>
             
-            <li class="ridedetails"><a href="/india/admin/ridedetails"> <span> Ride Details</span></a></li>
+            <li onclick="userDetails()" class="ridedetails"><a href="#"> <span> User Details</span></a></li>
             <li onclick="creatallIndiaCityInit()" class="ridedetails"><a href="#"> <span> Create All India City</span></a></li>
             <li class="gst"><a href="/india/admin/gstReport"> <span> Gst Report</span></a></li>
             <li onclick="addWallermoneyInit()" class="addwallet"><a href="#"> <span>Add Wallet Momey</span></a></li>
@@ -100,6 +100,23 @@
                 </div> -->
 
             </div>
+
+            <div style="display: none;"  id="allUser">
+
+                <div  class="col-xs-12 col-sm-12">
+                    <div class="panel panel-success">
+                          <div id="userListHeding" class="panel-heading">
+                                <!-- <h3 class="panel-title">All User  [100]</h3> -->
+                          </div>
+                          <div class="panel-body">
+                            <ul id="userList" class="list-group">
+                            </ul>
+                            
+                          </div>
+                    </div>
+                </div>
+            </div>
+
 
 
         </div>
