@@ -150,3 +150,17 @@ function userDetails(){
     })
 
 }
+
+
+function setStartUserid(){
+    var id=window.prompt();
+    if(id){
+         $.post('/admin/SetUserID',{id:id},function(data){
+                if(data){
+                    alert("Set Start User ID UserID to"+ data);
+                }
+            })
+    }
+   
+    
+}

@@ -29,6 +29,29 @@ const userSchema = new mongoose.Schema({
 });
 var usermodul = mongoose.model('moneyusers', userSchema);
 
+const transferSchema = new mongoose.Schema({ 
+    userName:String,
+    userID:Number,
+    rootID:String,
+    transferAmount:Number,
+    transactionID:Number,
+    totaltranferAmount:Number,
+    transactiondate: { type: Date, default: Date.now }
+});
+var transfermodul = mongoose.model('moneytransfer', transferSchema);
+
+
+const userLedgerSchema = new mongoose.Schema({ 
+    userName:String,
+    userID:Number,
+    rootID:String,
+    incentiveAmount:Number,
+    paymentAmount:Number,
+    transactiondate: { type: Date, default: Date.now }
+});
+var userLedgermodul = mongoose.model('moneyuserledger', userLedgerSchema);
+
+
 
 
 
@@ -38,5 +61,6 @@ var usermodul = mongoose.model('moneyusers', userSchema);
 module.exports={
     counter:countermodul,
     user:usermodul,
-    
+    userLedger:userLedgermodul,
+    transfer:transfermodul,
 }

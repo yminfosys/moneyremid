@@ -282,7 +282,9 @@ function searchdown(){
   }
 
   function myTree(id){
+    //alert(id)
     $.post('/user/getTree',{id:id},function(data){
+       // console.log(data)
         $("#mytree").css({"display":"block"});
         $("#userProfile").css({"display":"none"});
         $("#treeHead").html(' <li class="list-group-item active">\

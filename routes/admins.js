@@ -19,6 +19,7 @@ router.get('/', function(req, res, next) {
 
 
 
+
 router.post('/checkuserexist', async function(req, res, next) {
   try {
   await dbCon.connectDB()
@@ -66,6 +67,7 @@ router.post('/newPartner', async function(req, res, next) {
 
 
 
+
 router.post('/userDetails', async function(req, res, next) {
   try {
     await dbCon.connectDB();
@@ -78,6 +80,33 @@ router.post('/userDetails', async function(req, res, next) {
   }
   
 });
+
+
+router.post('/SetUserID', async function(req, res, next) {
+ 
+  try {
+    await dbCon.connectDB();
+  const user= await db.counter.findOneAndUpdate({fild :"userID"},{$set:{ value: req.body.id}});
+  console.log(user)
+  await dbCon.closeDB();
+  res.send(req.body.id);
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+  
+});
+
+// const user= await db.user.findOneAndUpdate({userID:req.body.userID},{$set:{
+//   adharNo:req.body.Aadhar,
+//   westrenUnionUser:req.body.wuID,
+//   westrenUnionPass:req.body.wuPsd,
+//   BinanceUser:req.body.BinanceID,
+//   BinancePass:req.body.BinancePsd,
+//   EmlID:req.body.EmlID,
+//   EmlPsd:req.body.EmlPsd,
+//   BankDelais:req.body.BankDelais
+// }});
 
 
 module.exports = router;
