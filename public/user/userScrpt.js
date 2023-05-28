@@ -1,5 +1,11 @@
 $( document ).ready(function() {
     var allredyloginuserID=$("#allredyloginuserID").val();
+
+    var sponsRootID=$("#sponsRootID").val();
+    var sponsID=$("#sponsID").val();
+    var sponsName=$("#sponsName").val();
+   
+
     if(allredyloginuserID){
 
         $("#UserPanel").css({"display":"block"});
@@ -13,17 +19,47 @@ $( document ).ready(function() {
 
         getUserprofile(allredyloginuserID);
     }else{
-        $("#loginPanel").css({"display":"block"});
-        $("#login").css({"display":"block"});
-        $("#regit").css({"display":"block"});
 
-        $("#logout").css({"display":"none"});
-        $("#logout").css({"display":"none"});
-        $("#dashHome").css({"display":"none"});
-        $("#UserPanel").css({"display":"none"});
+        if(sponsRootID && sponsID && sponsName){
+
+            $("#loginPanel").css({"display":"block"});
+            $("#login").css({"display":"block"});
+            $("#regit").css({"display":"block"});
+    
+            $("#logout").css({"display":"none"});
+            $("#logout").css({"display":"none"});
+            $("#dashHome").css({"display":"none"});
+            $("#UserPanel").css({"display":"none"});
+            regClick();
+            $("#SponsorName").val(sponsName);
+            $("#SponsorRootID").val(sponsRootID);
+            $("#sponsorID").val(sponsID);
+
+           //// http://localhost:3001/user/?rootID=A321&id=12&name=sukanta
+            
+
+        }else{
+            $("#loginPanel").css({"display":"block"});
+            $("#login").css({"display":"block"});
+            $("#regit").css({"display":"block"});
+    
+            $("#logout").css({"display":"none"});
+            $("#logout").css({"display":"none"});
+            $("#dashHome").css({"display":"none"});
+            $("#UserPanel").css({"display":"none"});
+        }
+
+
+        
         
         
     }
+
+    // if("<%=ref%>"){
+    //     // alert("<%=ref.name%>") 
+    //      regClick();
+    //      $("#loginPanel").css({"display":"none"});
+    //  }
 
 })
 
@@ -49,7 +85,7 @@ function searchdown(){
         $("#SponsorRootID").val("")
         $.post('/user/checkSponsor',{sponsorID:sponsorID},function(data){
            if(data){
-            console.log(data)
+            //console.log(data)
             $("#SponsorName").val(data.userName);
             $("#SponsorRootID").val(data.rootID);
 
@@ -69,7 +105,7 @@ function searchdown(){
     var regMobile=$("#regMobile").val().trim();
     var SponsorRootID=$("#SponsorRootID").val();
     var regPan=$("#regPan").val().toUpperCase().replace(/\s/g, '');
-    var regColumn=$("#regColumn").val();
+    var regColumn=0;
 
     var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/; 
 
@@ -111,37 +147,40 @@ function searchdown(){
             return
          }
 
-         if(!regColumn.length){
-            alert('Select Channel Column');
-            return
-         }
+         
 
          ///////Check Exist//////////
-                
-                ////Create Root//////
-         var channelRoot=''+SponsorRootID+''+regColumn+'';
+
+        //////Create Column No. ///////
+        $.post('/user/creatregColumn',{SponsorRootID:SponsorRootID},function(column){
+            //console.log(data);
+            alert(column.length)
+            regColumn=column.length
+               ////Create Root//////
+               var channelRoot=''+SponsorRootID+''+regColumn+'';
 
 
-         $.post('/user/checkuserexist',{channelRoot:channelRoot,regPan:regPan,regEmail:regEmail},function(data){
-           if(!data){
-            /////////Save New Partner//////
-            $.post('/user/newPartner',{
-                regEmail:regEmail,
-                regPassword:regPassword,
-                regUserName:regUserName,
-                regAddress:regAddress,
-                regMobile:regMobile,
-                channelRoot:channelRoot,
-                regPan:regPan
-            },function(reg){
-                alert("Registration  Success")
-            })
-
-           }else{
-            alert("Already Register With Us")
-           }
-         })
-
+               $.post('/user/checkuserexist',{channelRoot:channelRoot,regPan:regPan,regEmail:regEmail},function(data){
+                 if(!data){
+                  /////////Save New Partner//////
+                  $.post('/user/newPartner',{
+                      regEmail:regEmail,
+                      regPassword:regPassword,
+                      regUserName:regUserName,
+                      regAddress:regAddress,
+                      regMobile:regMobile,
+                      channelRoot:channelRoot,
+                      regPan:regPan
+                  },function(reg){
+                      alert("Registration  Success")
+                  })
+      
+                 }else{
+                  alert("Already Register With Us")
+                 }
+               })
+        
+        });
 
   }
 
@@ -154,7 +193,7 @@ function searchdown(){
     var EmlID=$("#EmlID").val().replace(/\s/g, '');
     var EmlPsd=$("#EmlPsd").val().replace(/\s/g, '');
     var BankDelais=$("#BankDelais").val();
-    var userID=$("#allredyloginuserID").val();
+    var userID=$("#activeUserID").val();
 
     if(Aadhar && wuID && wuPsd &&  BinanceID && BinancePsd && EmlID && EmlPsd && BankDelais){
         $.post('/user/completeReg',{
@@ -169,7 +208,9 @@ function searchdown(){
             userID:userID
         },function(user){
             if(user){
-                $("#CompleteRegistration").css({"display":"none"});
+                $("#ActivateThisUser").css({"display":"none"});
+                //$("#CompleteRegistration").css({"display":"none"});
+                
                 profile();
             }
         })
@@ -221,6 +262,7 @@ function searchdown(){
 
   }
 
+
   function logout(){
     $.post('/user/logout',{},function(data){
         if(data){
@@ -240,11 +282,12 @@ function searchdown(){
 
   function getUserprofile(userID){
     $.post('/user/GetUser',{userID:userID},function(user){
-        if(user.adharNo){
+        if(user.adharNo || user.userType=="Active"){
             $("#CompleteRegistration").css({"display":"none"});
             profile();
         }else{
             $("#CompleteRegistration").css({"display":"block"});
+            profile();
             
         }
     });
@@ -293,9 +336,88 @@ function searchdown(){
         </li>');
         $("#treeList").html("")
         data.Mytree.forEach(val => {
-            $("#treeList").append('<li onclick="myTree('+val.userID+')" style="cursor: pointer;" class="list-group-item">'+val.userName+' ID - '+val.userID+'<br>'+val.address+'</li>') 
+            var active='<span onclick="activeThisUser('+val.userID+')" style="background-color: red;" class="badge">Active</span>';
+            if(val.userType ){
+                if(val.userType == "Active" ){
+                    active= "";  
+                }
+            }
+            if(val.adharNo){
+                active= "";
+            }
+            $("#treeList").append('<li style="cursor: pointer;" class="list-group-item"> '+active+' <span onclick="myTree('+val.userID+')" class="badge">Details</span>'+val.userName+' ID - '+val.userID+'<br>'+val.address+'</li>') 
         });
     });
+  }
+
+  function activeThisUser(id){
+    $("#ActivateThisUser").css({"display":"block"});
+    $("#ActivateThisUser").html('<div  style="margin-top:3vh; height:100vh" class="row">\
+    <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">\
+        <div class="panel panel-success">\
+            <input type="hidden"  id="activeUserID" value="'+id+'">\
+              <div class="panel-heading">\
+                    <h3 class="panel-title">Complete this to Activate </h3>\
+              </div>\
+              <div class="panel-body">\
+                <div class="form-group">\
+                    <label>Aadhar Number</label>\
+                        <input type="text"  id="Aadhar" class="form-control" >\
+                </div>\
+                <div class="form-group">\
+                    <label>Western Union ID</label>\
+                        <input type="text"  id="wuID" class="form-control" >\
+                </div>\
+\
+                <div class="form-group">\
+                    <label>Western Union Password</label>\
+                        <input type="text"  id="wuPsd" class="form-control" >\
+                </div>\
+\
+                <div class="form-group">\
+                    <label>Binance ID</label>\
+                        <input type="text"  id="BinanceID" class="form-control" >\
+                </div>\
+\
+                <div class="form-group">\
+                    <label>Binance Password</label>\
+                        <input type="text"  id="BinancePsd" class="form-control" >\
+                </div>\
+\
+                <div class="form-group">\
+                    <label>Email ID</label>\
+                        <input type="text"  id="EmlID" class="form-control" >\
+                </div>\
+\
+                <div class="form-group">\
+                    <label>Email Password</label>\
+                        <input type="text"  id="EmlPsd" class="form-control" >\
+                </div>\
+                <div class="form-group">\
+                    <label>Bank Details</label> \
+                    <textarea  id="BankDelais" class="form-control" rows="3" placeholder="Name , A/c, IFSC, Bank Nane"></textarea>\
+                </div>\
+                <button onclick="completeReg()" type="button" class="btn btn-primary">Submit</button>\
+              </div>\
+        </div>  \
+    </div>\
+</div> ')
+
+  }
+
+  function createRefLink(id){
+    $.post('/user/createRefLink',{id:id},function(data){
+
+
+        var conte='https://moneyremid.com/user?rootID='+data.rootID+'&id='+data.userID+'&name='+data.userName+'';
+        console.log(conte);
+
+        $("#refLink").html('<div class="alert alert-info">\
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>\
+        <strong>Copy This Link </strong>'+conte+'\
+    </div>')
+    })
+
   }
    
   

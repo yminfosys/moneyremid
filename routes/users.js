@@ -33,12 +33,27 @@ router.post('/test', async function(req, res, next) {
   
 });
 
+// router.get('/test', async function(req, res, next) {
+// res.send("jhdfjghjd")
+// });
+
 router.get('/', async function(req, res, next) {
   try {
-    await dbCon.connectDB();
-    await dbCon.closeDB();
+    // await dbCon.connectDB();
+    // await dbCon.closeDB();
+    //console.log(req.query)
+    if(req.query.rootID && req.query.name && req.query.id){
+     var sponsRootID =req.query.rootID;
+     var sponsID= req.query.id
+     var sponsName =req.query.name
+     console.log(sponsRootID)
+    }else{
+      var sponsRootID ="";
+      var sponsID= "";
+      var sponsName = "";
+    }
     var allredylogin=req.cookies.userID
-    res.render('user/user',{allredylogin:allredylogin})
+    res.render('user/user',{allredylogin:allredylogin,sponsRootID:sponsRootID,sponsID:sponsID,sponsName:sponsName})
   }catch (error) {
     console.log(error);
     return error;
@@ -86,6 +101,22 @@ router.post('/checkSponsor', async function(req, res, next) {
   }
   
 });
+
+
+router.post('/creatregColumn', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.find({rootID: { $regex: '.*' + req.body.SponsorRootID + '.*' , $options: 'i' } } );
+    await dbCon.closeDB();
+    res.json(user);
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+  
+});
+
+
 
 
 
@@ -150,7 +181,8 @@ router.post('/completeReg', async function(req, res, next) {
     BinancePass:req.body.BinancePsd,
     EmlID:req.body.EmlID,
     EmlPsd:req.body.EmlPsd,
-    BankDelais:req.body.BankDelais
+    BankDelais:req.body.BankDelais,
+    userType:"Active"
   }});
   await dbCon.closeDB();
   res.json(user)
@@ -229,8 +261,23 @@ router.post('/getTree', async function(req, res, next) {
     const user= await db.user.findOne({userID:req.body.id});
     const Mytree=await db.user.find({rootID: { $regex: '.*' + user.rootID + '.*' , $options: 'i' } } );
     await dbCon.closeDB();
-    console.log("My Tree",Mytree)
+   // console.log("My Tree",Mytree)
     res.send({user:user,Mytree:Mytree})
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+})
+
+
+////////REf Link/////////////
+router.post('/createRefLink', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.findOne({userID:req.body.id});
+    await dbCon.closeDB();
+   // console.log("My Tree",Mytree)
+    res.send(user)
   }catch (error) {
     console.log(error);
     return error;

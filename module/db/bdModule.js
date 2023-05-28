@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     EmlID:String,
     EmlPsd:String,
     BankDelais:String,
+    userType:String,
     regdate: { type: Date, default: Date.now },
     lastlogin: { type: Date}
 });
