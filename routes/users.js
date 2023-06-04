@@ -174,7 +174,6 @@ router.post('/completeReg', async function(req, res, next) {
   try {
     await dbCon.connectDB();
   const user= await db.user.findOneAndUpdate({userID:req.body.userID},{$set:{
-    adharNo:req.body.Aadhar,
     westrenUnionUser:req.body.wuID,
     westrenUnionPass:req.body.wuPsd,
     BinanceUser:req.body.BinanceID,

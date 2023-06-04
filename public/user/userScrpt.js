@@ -185,7 +185,7 @@ function searchdown(){
   }
 
   function completeReg(){
-    var Aadhar=$("#Aadhar").val().replace(/\s/g, '');
+   
     var wuID=$("#wuID").val().replace(/\s/g, '');
     var wuPsd=$("#wuPsd").val().replace(/\s/g, '');
     var BinanceID=$("#BinanceID").val().replace(/\s/g, '');
@@ -197,7 +197,6 @@ function searchdown(){
 
     if(Aadhar && wuID && wuPsd &&  BinanceID && BinancePsd && EmlID && EmlPsd && BankDelais){
         $.post('/user/completeReg',{
-            Aadhar:Aadhar,
             wuID:wuID,
             wuPsd:wuPsd,
             BinanceID:BinanceID,
@@ -286,7 +285,7 @@ function searchdown(){
             $("#CompleteRegistration").css({"display":"none"});
             profile();
         }else{
-            $("#CompleteRegistration").css({"display":"block"});
+            $("#CompleteRegistration").css({"display":"none"});
             profile();
             
         }
@@ -352,18 +351,13 @@ function searchdown(){
 
   function activeThisUser(id){
     $("#ActivateThisUser").css({"display":"block"});
-    $("#ActivateThisUser").html('<div  style="margin-top:3vh; height:100vh" class="row">\
+    $("#ActivateThisUser").html('<div  style="margin-top:3vh; height:101vh" class="row">\
     <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">\
         <div class="panel panel-success">\
             <input type="hidden"  id="activeUserID" value="'+id+'">\
               <div class="panel-heading">\
                     <h3 class="panel-title">Complete this to Activate </h3>\
               </div>\
-              <div class="panel-body">\
-                <div class="form-group">\
-                    <label>Aadhar Number</label>\
-                        <input type="text"  id="Aadhar" class="form-control" >\
-                </div>\
                 <div class="form-group">\
                     <label>Western Union ID</label>\
                         <input type="text"  id="wuID" class="form-control" >\
@@ -400,8 +394,7 @@ function searchdown(){
                 <button onclick="completeReg()" type="button" class="btn btn-primary">Submit</button>\
               </div>\
         </div>  \
-    </div>\
-</div> ')
+    </div>')
 
   }
 
