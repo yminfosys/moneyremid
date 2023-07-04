@@ -44,7 +44,7 @@
             </li>
             
             <li onclick="userDetails()" class="ridedetails"><a href="#"> <span> User Details</span></a></li>
-            <li onclick="userTransactionInit()" class="ridedetails"><a href="#"> <span> Create Transaction</span></a></li>
+            <li onclick="replaseidInit()" class="ridedetails"><a href="#"> <span> Replace ID</span></a></li>
             <li class="gst"><a href="/india/admin/gstReport"> <span> Gst Report</span></a></li>
             <li onclick="addWallermoneyInit()" class="addwallet"><a href="#"> <span>Add Wallet Momey</span></a></li>
             <li onclick="orderAmountModify()" class="modf"><a href="#"> <span>Modify Order Amount</span></a></li>
@@ -116,6 +116,66 @@
                           </div>
                     </div>
                 </div>
+            </div>
+
+            <div style="display: none;"  id="replaceID">
+                <div  class="col-xs-12 col-sm-12">
+                    <div class="panel panel-success">
+                          <div id="userListHeding" class="panel-heading">
+                                <h3 class="panel-title">Replace New ID with Old ID</h3>
+                          </div>
+                          <div class="panel-body">
+                            
+                            <div class="form-group" id="replacrDetails">
+                                <label for="inputOLD ID" class="col-sm-2 control-label">OLD ID:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="OLD ID" id="oldID" class="form-control" value="" required="required" pattern="" title="">
+                                </div>
+                                <div class="col-sm-10 col-sm-offset-2" style="margin-top: 5px;">
+                                    
+                                    <button onclick="getoldIDDetails()" type="button" class="btn btn-primary form-control">Submit</button>
+                                    
+                                </div>
+<!-- 
+                                <label for="inputOLD ID" class="col-sm-2 control-label">Name:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" id="nameReplace" class="form-control" value="">
+                                </div>
+
+                                <label for="inputOLD ID" class="col-sm-2 control-label">email:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" id="emailReplace" class="form-control" value="">
+                                </div>
+
+                                <label for="inputOLD ID" class="col-sm-2 control-label">Mobile:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" id="mobileReplace" class="form-control" value="">
+                                </div>
+
+                                <label for="inputOLD ID" class="col-sm-2 control-label">Pan No:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" id="panReplace" class="form-control" value="">
+                                </div>
+
+                                <label for="inputOLD ID" class="col-sm-2 control-label">Address:</label>
+                                <div class="col-sm-10">
+                                    <textarea  id="addressReplace" class="form-control" rows="3"></textarea>
+                                </div>
+
+                                <div class="col-sm-10 col-sm-offset-2" style="margin-top: 5px;">
+                                    
+                                    <button onclick="oldtonewReplace()" type="button" class="btn btn-primary form-control">Replace</button>
+                                    
+                                </div> -->
+                                
+                            </div>
+                            
+                            
+                            
+                          </div>
+                    </div>
+                </div>
+            
             </div>
 
 

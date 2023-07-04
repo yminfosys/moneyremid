@@ -173,3 +173,110 @@ function setStartUserid(){
    
     
 }
+
+function replaseidInit(){
+    $("#replaceID").css({"display":"block"})
+    
+}
+
+function getoldIDDetails(){
+    var oldID=$("#oldID").val().replace(/\s/g, '');
+    
+    $.post('/admin/oldUserDetails',{id:oldID},function(user){
+        console.log(user)
+        if(user){
+            $("#replaceID").html('<label for="inputOLD ID" class="col-sm-2 control-label">Name:</label>\
+            <div class="col-sm-10">\
+                <input type="text" id="nameReplace" class="form-control" value="'+user.userName+'">\
+            </div>\
+            <label for="inputOLD ID" class="col-sm-2 control-label">email:</label>\
+            <div class="col-sm-10">\
+                <input type="text" id="emailReplace" class="form-control" value="'+user.email+'">\
+            </div>\
+            <label for="inputOLD ID" class="col-sm-2 control-label">Mobile:</label>\
+            <div class="col-sm-10">\
+                <input type="text" id="mobileReplace" class="form-control" value="'+user.mobile+'">\
+            </div>\
+            <label for="inputOLD ID" class="col-sm-2 control-label">Pan No:</label>\
+            <div class="col-sm-10">\
+                <input type="text" id="panReplace" class="form-control" value="'+user.panNo+'">\
+            </div>\
+            <label for="inputOLD ID" class="col-sm-2 control-label">Address:</label>\
+            <div class="col-sm-10">\
+                <textarea  id="addressReplace" class="form-control" rows="3">'+user.address+'</textarea>\
+            </div>\
+            <label for="inputOLD ID" class="col-sm-2 control-label">User ID:</label>\
+            <div class="col-sm-10">\
+                <input type="text" id="userIDReplace" class="form-control" value="'+user.userID+'">\
+            </div>\
+            <div class="col-sm-10 col-sm-offset-2" style="margin-top: 5px;">\
+                <button onclick="oldtonewReplace()" type="button" class="btn btn-primary form-control">Replace</button>\
+            </div>')
+
+        }else{
+
+        }
+
+    });
+   
+
+}
+
+function oldtonewReplace(){
+    var emailReplace=$("#emailReplace").val().replace(/\s/g, '');
+    var nameReplace=$("#nameReplace").val();
+    var addressReplace=$("#addressReplace").val();
+    var mobileReplace=$("#mobileReplace").val().replace(/\s/g, '');
+    var userIDReplace=$("#userIDReplace").val().replace(/\s/g, '');
+    var panReplace=$("#panReplace").val().toUpperCase().replace(/\s/g, '');
+
+    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/; 
+
+   
+
+      if (reg.test(emailReplace) == false) 
+          {
+              alert('Invalid Email Address');
+              $("#emailReplace").focus();
+              return 
+          }
+          
+
+           if(nameReplace.length < 2){
+            alert('Enter Valid Name');
+            $("#nameReplace").focus()
+            return
+           }
+         
+
+         if(mobileReplace.length != 10){
+            alert('Enter Valid Mobile Number');
+            $("#mobileReplace").focus()
+            return
+         }
+         if(panReplace.length != 10){
+            alert('Enter Valid PAN Number');
+            $("#panReplace").focus()
+            return
+         }
+         
+
+         $.post('/admin/updateUser',{
+            emailReplace:emailReplace,
+            nameReplace:nameReplace,
+            addressReplace:addressReplace,
+            mobileReplace:mobileReplace,
+            userIDReplace:userIDReplace,
+            panReplace:panReplace
+         },function(user){
+            console.log(user)
+            if(user){
+                alert("update Success")
+            }else{
+                alert("error")
+            }
+
+         })
+
+
+}
