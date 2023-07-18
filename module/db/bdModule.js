@@ -53,9 +53,25 @@ const userLedgerSchema = new mongoose.Schema({
 var userLedgermodul = mongoose.model('moneyuserledger', userLedgerSchema);
 
 
+const selfTradeSchema = new mongoose.Schema({ 
+    tradeAmount:String,
+    usdtbuy:String,
+    saletradeamount:String,
+    profitAmount:String,
+    rootID:String,
+    userID:Number,
+    userName:String,
+    tradeStatus:String,
+
+    transactiondate: { type: Date, default: Date.now }
+});
+var selfTrademodul = mongoose.model('moneyselftrade', selfTradeSchema);
 
 
-
+const totayUSDTSchema = new mongoose.Schema({ 
+    todayusdt:String
+});
+var totayUSDTmodul = mongoose.model('moneytotayusdt', totayUSDTSchema);
 
 
 
@@ -64,4 +80,5 @@ module.exports={
     user:usermodul,
     userLedger:userLedgermodul,
     transfer:transfermodul,
+    selfTrade:selfTrademodul
 }

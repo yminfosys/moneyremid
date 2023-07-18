@@ -66,9 +66,7 @@
         <div  class="container-fluid">
         <!-- User Login -->
 
-        <div id="refLink">
-            
-        </div>
+        
        
         
         
@@ -259,7 +257,7 @@
                 <li onclick="myTree('<%=allredylogin%>')" class="Recharge">
                   <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <i class="fa fa-cubes" aria-hidden="true"></i>
-                      <span>My Tree</span>
+                      <span>My Level</span>
                   </a>
                   
                 </li>
@@ -272,10 +270,10 @@
                     
                   </li>
                 
-                <li  class="Myrides">
+                <li onclick="selfTradeInit('<%=allredylogin%>')" class="selftrade">
                     <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fa fa-money" aria-hidden="true"></i>
-                        <span>Payment</span>
+                        <span>Self-Trade</span>
                     </a>
                   </li>
                   <li   class="Myrides">
@@ -311,6 +309,14 @@
                 <div class="container-fluid">
                     <div id="userProfile" class="row">
                     </div>
+                    <div id="refLink" style="display: none;">
+            
+                    </div>
+
+                    <div id="other" style="display: nonen;">
+                    
+                    </div>
+
                         <div id="mytree" style="display: none;" class="panel panel-info">
                               <div class="panel-heading">
                                     <h3 class="panel-title">Employee Tree</h3>
@@ -334,6 +340,8 @@
                                 </div>
                                </div>
                         </div>
+
+                        
                 </div>
                         
                     
@@ -356,3 +364,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </body>
 </html>
+
+
+
+
+

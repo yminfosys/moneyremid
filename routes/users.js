@@ -281,6 +281,48 @@ router.post('/createRefLink', async function(req, res, next) {
     console.log(error);
     return error;
   }
+});
+
+
+
+//////// Get Trade Request/////////////
+router.post('/getTradeRequest', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const trade= await db.selfTrade .find({userID:req.body.id,tradeStatus:"Request"});
+   
+    await dbCon.closeDB();
+    
+   // console.log("My Tree",Mytree)
+    res.send(trade)
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+})
+
+//////// New Trade Request/////////////
+router.post('/tradeRequest', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.findOne({userID:req.body.id});
+    const selfTrade= await db.selfTrade({
+      tradeAmount:req.body.inr,
+      usdtbuy:req.body.usdt,
+      rootID:user.rootID,
+      userID:user.userID,
+      userName:user.userName,
+      tradeStatus:"Request",
+    })
+    await selfTrade.save();
+    await dbCon.closeDB();
+    
+   // console.log("My Tree",Mytree)
+    res.send(user)
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
 })
 
 

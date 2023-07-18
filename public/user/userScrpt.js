@@ -298,6 +298,7 @@ function searchdown(){
         $("#userProfile").css({"display":"block"});
 
         $("#mytree").css({"display":"none"});
+        $("#other").css({"display":"none"});
 
         $("#userContent").html(''+user.userName+'<br>ID: '+user.userID+'')
         $("#userProfile").html('<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-lg-offset-3 col-md-offset-3">\
@@ -329,6 +330,7 @@ function searchdown(){
        // console.log(data)
         $("#mytree").css({"display":"block"});
         $("#userProfile").css({"display":"none"});
+        $("#other").css({"display":"none"})
         $("#treeHead").html(' <li class="list-group-item active">\
         <span class="badge">'+data.Mytree.length+'</span>\
         '+data.user.userName+'\
@@ -405,11 +407,116 @@ function searchdown(){
         var conte='https://moneyremid.com/user?rootID='+data.rootID+'&id='+data.userID+'&name='+data.userName+'';
         console.log(conte);
 
+        $("#refLink").css({"display":"block"})
+
+        $("#other").css({"display":"none"})
+        $("#mytree").css({"display":"none"})
+        navigator.clipboard.writeText(conte);
+        
+
         $("#refLink").html('<div class="alert alert-info">\
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>\
         <strong>Copy This Link </strong>'+conte+'\
     </div>')
     })
+
+  }
+
+  function selfTradeInit(id){
+    
+    $("#other").html('<div id="selftrade" style="display: non;" class="panel panel-info">\
+    <div class="panel-heading">\
+        <h3 class="panel-title">Today USDT Rate : 90.00 INR</h3>\
+    </div>\
+    <div class="panel-body">\
+    <div class="row">\
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">\
+          <div class="form-group">\
+            <label for="inputtradeAmount" class="col-sm-3 control-label">Trade-Amount:</label>\
+            <div class="col-sm-4">\
+                <select onchange="usdtcalculetion()" id="inputtradeAmount" class="form-control">\
+                    <option value="0">Select Amount</option>\
+                    <option value="10000">10000</option>\
+                    <option value="25000">25000</option>\
+                    <option value="50000">50000</option>\
+                    <option value="100000">100000</option>\
+                  </select>\
+            </div>\
+            <div  class="col-sm-4">\
+                USDT: <span id="usdtvalue">302.11</span>\
+            </div>\
+            <div class="col-sm-4 col-sm-offset-3" style="margin-top: 5px;">\
+                <button onclick="newTradeRequest('+id+')" type="button" class="btn btn-danger">Request</button>\
+            </div>\
+          </div>\
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">\
+            <ul id="tradeRequestList" class="list-group" style="height: 50vh; overflow-y: auto; margin-top: 10px;" >\
+            </ul>\
+          </div>\
+        </div>\
+    </div>\
+    </div>\
+</div>')
+    $("#other").css({"display":"block"});
+    $("#mytree").css({"display":"none"});
+    $("#refLink").css({"display":"none"});
+    $("#userProfile").css({"display":"none"});
+    $("#tradeRequestList").html('')
+    getTradeRequest(id);
+  }
+
+  function getTradeRequest(id){
+    $.post('/user/getTradeRequest',{id:id},function(data){
+        if(data.length > 0){
+            $("#tradeRequestList").html('')
+            data.forEach(val => {
+                
+                $("#tradeRequestList").append('<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">\
+                <div class="thumbnail">\
+                    <div class="caption">\
+                        <h3>Trade Request</h3>\
+                        <p>\
+                            Name: '+val.userName+'<br>\
+                            ID: '+val.userID+'<br>\
+                            Trade Amount: '+val.tradeAmount+' INR<br>\
+                            USDT: '+val.usdtbuy+'<br>\
+                            Status: Sell Pending<br>\
+                        </p>\
+                        <p>\
+                            <a href="#" class="btn btn-primary">Update</a>\
+                            <a href="#" class="btn btn-danger">Cancel Request</a>\
+                        </p>\
+                    </div>\
+                </div>\
+            </div>') 
+            });
+        } 
+    })
+  }
+
+
+  function usdtcalculetion(){
+   var inr= $("#inputtradeAmount").val();
+   var usdt=(Number(inr) / 90).toFixed(2);
+   $("#usdtvalue").html(''+usdt+'')
+   
+  }
+
+  function newTradeRequest(id){
+   
+    var inr= $("#inputtradeAmount").val();
+    var usdt=(Number(inr) / 90).toFixed(2);
+    if(inr > 0){
+        $.post('/user/tradeRequest',{
+            id:id,
+            usdt:usdt,
+            inr:inr
+        },function(user){
+           getTradeRequest(user.userID); 
+        });
+    }else{
+        alert("Select Trade-Amount")
+    }
 
   }
    
