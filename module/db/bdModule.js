@@ -54,6 +54,7 @@ const userLavelLedgerSchema = new mongoose.Schema({
     userID:Number,
     rootID:String,
     lavelrootID:String,
+    address:String,
     lavel:String,
     lavelEarning:String,
     paidEarninyStatus:String,

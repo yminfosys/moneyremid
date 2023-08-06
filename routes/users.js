@@ -223,7 +223,7 @@ var payment = async function(inp){
 
 router.post('/newPartner', async function(req, res, next) {
   try{
-
+  await  auto_incriment.auto_incriment("userID").then(async function(inc_val){
 
 var loop=req.body.channelRoot; //// B-5-1-1
 
@@ -246,10 +246,11 @@ await dbCon.connectDB();
 const Lavel= await db.lavelLedger.findOne({rootID:loop.substring(0,newRoot),lavelrootID:loop,lavel:L});
 if(!Lavel){
   const newlavel= await db.lavelLedger({
-            userName:"sukanta",
-            userID:"123",
+            userName:req.body.regUserName,
+            userID:inc_val,
             rootID:loop.substring(0,newRoot),
             lavelrootID:loop,
+            address:req.body.regAddress,
             lavel:L,
             lavelEarning:payme,
             paidEarninyStatus:"Due",
@@ -260,8 +261,7 @@ await dbCon.closeDB();
 };
 
 /////// add new user///////
-  bcrypt.hash(req.body.regPassword, saltRounds, function(err, hash) {
-    auto_incriment.auto_incriment("userID").then(async function(inc_val){
+  bcrypt.hash(req.body.regPassword, saltRounds, async function(err, hash) {
         await dbCon.connectDB()
         const user= await db.user({
         userName:req.body.regUserName,
@@ -276,14 +276,11 @@ await dbCon.closeDB();
       await user.save();
       await dbCon.closeDB();
       res.json(user)
-      //console.log(req.body)
       
-
-      })
 })
 
 
-
+  })
 
   } catch (error) {
     console.log(error);
