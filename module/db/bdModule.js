@@ -24,10 +24,17 @@ const userSchema = new mongoose.Schema({
     EmlID:String,
     EmlPsd:String,
     BankDelais:String,
+    bankName:String,
+    bankAccount:String,
+    bankIfsc:String,
+    bnakBranch:String,
     userType:String,
     regdate: { type: Date, default: Date.now },
     lastlogin: { type: Date}
 });
+
+
+
 var usermodul = mongoose.model('moneyusers', userSchema);
 
 const transferSchema = new mongoose.Schema({ 
@@ -42,15 +49,17 @@ const transferSchema = new mongoose.Schema({
 var transfermodul = mongoose.model('moneytransfer', transferSchema);
 
 
-const userLedgerSchema = new mongoose.Schema({ 
+const userLavelLedgerSchema = new mongoose.Schema({ 
     userName:String,
     userID:Number,
     rootID:String,
-    incentiveAmount:Number,
-    paymentAmount:Number,
-    transactiondate: { type: Date, default: Date.now }
+    lavelrootID:String,
+    lavel:String,
+    lavelEarning:String,
+    paidEarninyStatus:String,
+    paydate: { type: Date }
 });
-var userLedgermodul = mongoose.model('moneyuserledger', userLedgerSchema);
+var userLavelLedgermodul = mongoose.model('moneyuserlavelledger', userLavelLedgerSchema);
 
 
 const selfTradeSchema = new mongoose.Schema({ 
@@ -78,7 +87,7 @@ var totayUSDTmodul = mongoose.model('moneytotayusdt', totayUSDTSchema);
 module.exports={
     counter:countermodul,
     user:usermodul,
-    userLedger:userLedgermodul,
+    lavelLedger:userLavelLedgermodul,
     transfer:transfermodul,
     selfTrade:selfTrademodul
 }

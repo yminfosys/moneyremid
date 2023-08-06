@@ -135,9 +135,131 @@ router.post('/checkuserexist', async function(req, res, next) {
 })
 
 
+var payment = async function(inp){
+  let day
+  
+    switch (inp) {
+    
+      case 1:
+        day = 800;
+        break;
+      case 2:
+        day = 400;
+        break;
+      case 3:
+        day = 250;
+        break;
+      case 4:
+        day = 150;
+        break;
+      case 5:
+        day = 100;
+        break;
+      case 6:
+        day = 75;
+        break;
+      case 7:
+        day = 50;
+        break;
+      case 8:
+        day = 30;
+        break;
+      case 9:
+        day = 25;
+        break;
+      case 10:
+        day = 20;
+        break;
+      case 11:
+        day = 1;
+
+        break;
+      case 12:
+        day = 1;
+
+        break;
+      case 13:
+        day = 1;
+
+
+        break;
+      case 14:
+        day = 1;
+
+        break;
+      case 15:
+        day = 1;
+
+        break;
+      case 16:
+        day = 0.5;
+
+        break;
+      case 17:
+        day = 0.5;
+
+        break;
+      case 18:
+        day = 0.5;
+
+
+        break;
+      case 19:
+        day = 0.5;
+
+        break;
+      case 20:
+        day = 0.5;
+        
+        
+    }
+    return day;
+  
+  
+}
+
+
+
 
 router.post('/newPartner', async function(req, res, next) {
-  try {
+  try{
+
+
+var loop=req.body.channelRoot; //// B-5-1-1
+
+
+var counter=loop.length;
+var L=0;
+for(i=0; i < counter -1;) {
+  L++;
+    i=i+2;
+    var newRoot=counter-i;
+//console.log(i);
+//console.log(loop.substring(0,newRoot));
+//console.log("L",L);
+const payme= await payment(L);
+//console.log(payme );
+
+/////// Lavel input//////   
+await dbCon.connectDB();
+///const user= await db.user.findOne({$or: [{rootID:req.body.channelRoot},{panNo:req.body.regPan},{email:req.body.regEmail}]});
+const Lavel= await db.lavelLedger.findOne({rootID:loop.substring(0,newRoot),lavelrootID:loop,lavel:L});
+if(!Lavel){
+  const newlavel= await db.lavelLedger({
+            userName:"sukanta",
+            userID:"123",
+            rootID:loop.substring(0,newRoot),
+            lavelrootID:loop,
+            lavel:L,
+            lavelEarning:payme,
+            paidEarninyStatus:"Due",
+          })
+          await newlavel.save();
+        }
+await dbCon.closeDB();
+};
+
+/////// add new user///////
   bcrypt.hash(req.body.regPassword, saltRounds, function(err, hash) {
     auto_incriment.auto_incriment("userID").then(async function(inc_val){
         await dbCon.connectDB()
@@ -159,11 +281,41 @@ router.post('/newPartner', async function(req, res, next) {
 
       })
 })
+
+
+
+
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+//   try {
+//   bcrypt.hash(req.body.regPassword, saltRounds, function(err, hash) {
+//     auto_incriment.auto_incriment("userID").then(async function(inc_val){
+//         await dbCon.connectDB()
+//         const user= await db.user({
+//         userName:req.body.regUserName,
+//         userID:inc_val,
+//         rootID:req.body.channelRoot,
+//         password:hash,
+//         email:req.body.regEmail,
+//         address:req.body.regAddress,
+//         mobile:req.body.regMobile,
+//         panNo:req.body.regPan
+//       })
+//       await user.save();
+//       await dbCon.closeDB();
+//       res.json(user)
+//       //console.log(req.body)
+      
+
+//       })
+// })
   
-} catch (error) {
-  console.log(error);
-  return error;
-}
+// } catch (error) {
+//   console.log(error);
+//   return error;
+// }
 
 })
 
@@ -253,12 +405,34 @@ router.get('/resetpassword', async function(req, res, next) {
   
 })
 
+////////Update Bank/////////////
+router.post('/editBank', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.findOneAndUpdate({userID:req.body.id},{$set:{
+      bankName:req.body.bankName,
+      bankAccount:req.body.bankAccount,
+      bankIfsc:req.body.bankIfsc,
+      bnakBranch:req.body.bankbranch,
+    }});
+    await dbCon.closeDB();
+   // console.log("My Tree",Mytree)
+    res.send(user)
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+})
+
+
+
 ////////Get Tree info/////////////
 router.post('/getTree', async function(req, res, next) {
   try {
     await dbCon.connectDB();
     const user= await db.user.findOne({userID:req.body.id});
-    const Mytree=await db.user.find({rootID: { $regex: '.*' + user.rootID + '.*' , $options: 'i' } } );
+    // const Mytree=await db.user.find({rootID: { $regex: '.*' + user.rootID + '.*' , $options: 'i' } } );
+    const Mytree=await db.lavelLedger.find({rootID:user.rootID,lavel:req.body.lavel } );
     await dbCon.closeDB();
    // console.log("My Tree",Mytree)
     res.send({user:user,Mytree:Mytree})

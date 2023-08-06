@@ -254,7 +254,7 @@
                     <div style="font-size: 25px; text-align: center;"><i class="fa fa-user-circle" aria-hidden="true"></i></div>
                     <div id="userContent" class="text-center">Your Name<br>ID: 001</div>
                 </li>
-                <li onclick="myTree('<%=allredylogin%>')" class="Recharge">
+                <li onclick="myTree('<%=allredylogin%>',1)" class="Recharge">
                   <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                     <i class="fa fa-cubes" aria-hidden="true"></i>
                       <span>My Level</span>
@@ -317,6 +317,8 @@
                     
                     </div>
 
+                   
+
                         <div id="mytree" style="display: none;" class="panel panel-info">
                               <div class="panel-heading">
                                     <h3 class="panel-title">Employee Tree</h3>
@@ -328,9 +330,13 @@
                                             <li class="list-group-item active">
                                                 <span class="badge">100</span>
                                                 Your Name
+                         
+                                                <li class="list-group-item">\
+                                                   
+                                                    </li>
                                             </li>
                                         </ul>
-                                        <ul id="treeList" class="list-group" style="height: 50vh; overflow-y: auto;" >
+                                        <ul id="treeList" class="list-group col-xs-12" style="height: 50vh; overflow-y: auto;" >
                                             <!-- <li onclick="myChildTree(10)" style="cursor: pointer;" class="list-group-item">Ankush Kar ID - 10 <br>Ads:</li>
                                             <li onclick="myChildTree(10)" style="cursor: pointer;" class="list-group-item">Ankush Kar ID - 10</li>
                                             <li onclick="myChildTree(10)" style="cursor: pointer;" class="list-group-item">Ankush Kar ID - 10</li>

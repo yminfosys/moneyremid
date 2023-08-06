@@ -1,3 +1,5 @@
+const { urlencoded } = require("express");
+
 $( document ).ready(function() {
     var allredyloginuserID=$("#allredyloginuserID").val();
 
@@ -154,10 +156,10 @@ function searchdown(){
         //////Create Column No. ///////
         $.post('/user/creatregColumn',{SponsorRootID:SponsorRootID},function(column){
             //console.log(data);
-            alert(column.length)
+            //alert(column.length)
             regColumn=column.length
                ////Create Root//////
-               var channelRoot=''+SponsorRootID+''+regColumn+'';
+               var channelRoot=''+SponsorRootID+'-'+regColumn+'';
 
 
                $.post('/user/checkuserexist',{channelRoot:channelRoot,regPan:regPan,regEmail:regEmail},function(data){
@@ -300,21 +302,26 @@ function searchdown(){
         $("#mytree").css({"display":"none"});
         $("#other").css({"display":"none"});
 
-        $("#userContent").html(''+user.userName+'<br>ID: '+user.userID+'')
+        $("#userContent").html(''+user.userName+'<br>ID: MR-'+user.userID+'')
         $("#userProfile").html('<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-lg-offset-3 col-md-offset-3">\
                 <div class="thumbnail">\
                     <img data-src="#" alt="">\
                     <div class="caption">\
                         <h3>'+user.userName+'</h3>\
                         <p>\
-                           My SponsorID: '+user.userID+'\
+                           My SponsorID: MR-'+user.userID+'\
                            <hr>\
                         </p>\
                         <p>Mobile Number: '+user.mobile+'</p>\
                         <p>Address: '+user.address+'</p>\
                         <p>PAN: '+user.panNo+'</p>\
+                        <p>Bank Name: '+user.bankName+'</p>\
+                        <p>Bank A/c no: '+user.bankAccount+'</p>\
+                        <p>Bank IFSC: '+user.bankIfsc+'</p>\
+                        <p>Bank Branch: '+user.bnakBranch+'</p>\
+                        <p id="editBank"></p>\
                         <p>\
-                            <a href="#" class="btn btn-primary">Edit Profile</a>\
+                            <a  onclick="editbankinit('+user.userID+')" id="editBankBtn" class="btn btn-primary">Edit Bank</a>\
                         </p>\
                     </div>\
                 </div>\
@@ -324,31 +331,110 @@ function searchdown(){
     });      
   }
 
-  function myTree(id){
+  function editbankinit(id){
+    $("#editBank").html('<legend>Add / Update Bank</legend>\
+    <div class="form-group">\
+        <label for="">Bank Name :*</label>\
+        <input type="text" class="form-control" id="bankName" >\
+    </div>\
+    <div class="form-group">\
+        <label for="">Bank Account no :*</label>\
+        <input type="text" class="form-control" id="bankAccount" >\
+    </div>\
+    <div class="form-group">\
+        <label for="">Bank IFSC :*</label>\
+        <input type="text" class="form-control" id="bankIfsc" >\
+    </div>\
+    <div class="form-group">\
+        <label for="">Bank Branch :*</label>\
+        <input type="text" class="form-control" id="bankbranch" >\
+    </div>\
+    <button onclick="editBank('+id+')" class="btn btn-primary">Submit</button>');
+    $("#editBankBtn").css({"display":"none"});
+
+  }
+  
+
+  function editBank(id){
+    var bankName=$("#bankName").val().replace(/\s/g, '');
+    var bankAccount=$("#bankAccount").val().replace(/\s/g, '');
+    var bankIfsc=$("#bankIfsc").val().replace(/\s/g, '');
+    var bankbranch=$("#bankbranch").val().replace(/\s/g, '');
+    $.post('/user/editBank',{
+        id:id,
+        bankName:bankName,
+        bankAccount:bankAccount,
+        bankIfsc:bankIfsc,
+        bankbranch:bankbranch
+    },function(data){
+        logout();
+    })
+
+    
+  }
+
+  function myTree(id,lavel){
     //alert(id)
-    $.post('/user/getTree',{id:id},function(data){
+    $.post('/user/getTree',{id:id,lavel:lavel},function(data){
        // console.log(data)
         $("#mytree").css({"display":"block"});
-        $("#userProfile").css({"display":"none"});
+        
         $("#other").css({"display":"none"})
         $("#treeHead").html(' <li class="list-group-item active">\
         <span class="badge">'+data.Mytree.length+'</span>\
+        <span class="badge">Lavel-'+lavel+'</span>\
         '+data.user.userName+'\
+        </li>\
+        <li class="list-group-item" style="height: 6vh; margin-top:2px;">\
+        <div class="col-xs-8">\
+        <select id="yourlavel" class="form-control">\
+            <option value="">Select Lavel</option>\
+            <option value="1">Direct</option>\
+            <option value="2">Lavel-2</option>\
+            <option value="3">Lavel-3</option>\
+            <option value="4">Lavel-4</option>\
+            <option value="5">Lavel-5</option>\
+            <option value="6">Lavel-6</option>\
+            <option value="7">Lavel-7</option>\
+            <option value="8">Lavel-8</option>\
+            <option value="9">Lavel-9</option>\
+            <option value="10">Lavel-10</option>\
+            <option value="11">Lavel-11</option>\
+            <option value="12">Lavel-12</option>\
+            <option value="13">Lavel-13</option>\
+            <option value="14">Lavel-14</option>\
+            <option value="15">Lavel-15</option>\
+            <option value="16">Lavel-16</option>\
+            <option value="17">Lavel-17</option>\
+            <option value="18">Lavel-18</option>\
+            <option value="19">Lavel-19</option>\
+            <option value="20">Lavel-20</option>\
+        </select>\
+        </div>\
+        <div class="col-xs-4">\
+        <button onclick="callLavelTree('+id+')" type="button" class="btn btn-sm btn-primary">Go</button>\
+        </div>\
         </li>');
         $("#treeList").html("")
         data.Mytree.forEach(val => {
-            var active='<span onclick="activeThisUser('+val.userID+')" style="background-color: red;" class="badge">Active</span>';
-            if(val.userType ){
-                if(val.userType == "Active" ){
-                    active= "";  
-                }
-            }
-            if(val.adharNo){
-                active= "";
-            }
-            $("#treeList").append('<li style="cursor: pointer;" class="list-group-item"> '+active+' <span onclick="myTree('+val.userID+')" class="badge">Details</span>'+val.userName+' ID - '+val.userID+'<br>'+val.address+'</li>') 
+            
+            $("#treeList").append('<li class="list-group-item">'+val.userName+'<br/>ID: MR-'+val.userID+'</li>')
+            
         });
+        $("#treeList").append('<li style="" class="list-group-item"> \
+            <ul class="pagination pagination-sm">\
+                <li><a href="#">&laquo;</a></li>\
+                <li><a href="#">1</a></li>\
+                <li><a href="#">2</a></li>\
+                <li><a href="#">&raquo;</a></li>\
+           </ul>\
+           </li>');
     });
+  }
+
+  function callLavelTree(id){
+    var lavel=$("#yourlavel").val();
+    myTree(id,lavel);
   }
 
   function activeThisUser(id){
@@ -406,6 +492,7 @@ function searchdown(){
 
         var conte='https://moneyremid.com/user?rootID='+data.rootID+'&id='+data.userID+'&name='+data.userName+'';
         console.log(conte);
+        conte=encodeURI(conte);
 
         $("#refLink").css({"display":"block"})
 
