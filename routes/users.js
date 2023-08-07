@@ -422,6 +422,20 @@ router.post('/editBank', async function(req, res, next) {
 })
 
 
+////////ADD Member/////////
+
+router.post('/addMember', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.findOne({userID:req.body.id});
+    await dbCon.closeDB();
+    res.json(user);
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+})
+
 
 ////////Get Tree info/////////////
 router.post('/getTree', async function(req, res, next) {

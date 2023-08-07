@@ -176,6 +176,8 @@ function searchdown(){
                       regPan:regPan
                   },function(reg){
                       alert("Registration  Success")
+
+                      location.replace("/user")
                   })
       
                  }else{
@@ -372,6 +374,26 @@ function searchdown(){
     })
 
     
+  }
+
+  function addMember(id){
+    $.post('/user/addMember',{id:id},function(user){
+
+        $("#loginPanel").css({"display":"block"});
+        $("#login").css({"display":"block"});
+        $("#regit").css({"display":"block"});
+
+        $("#logout").css({"display":"none"});
+        $("#logout").css({"display":"none"});
+        $("#dashHome").css({"display":"none"});
+        $("#UserPanel").css({"display":"none"});
+        regClick();
+        $("#SponsorName").val(user.userName);
+        $("#SponsorRootID").val(user.rootID);
+        $("#sponsorID").val(user.userID);
+
+    });
+
   }
 
   function myTree(id,lavel){
