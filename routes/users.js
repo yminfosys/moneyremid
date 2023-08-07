@@ -42,11 +42,11 @@ router.get('/', async function(req, res, next) {
     // await dbCon.connectDB();
     // await dbCon.closeDB();
     //console.log(req.query)
-    if(req.query.rootID && req.query.name && req.query.id){
-     var sponsRootID =req.query.rootID;
-     var sponsID= req.query.id
-     var sponsName =req.query.name
-     console.log(sponsRootID)
+    if(req.query.refrootID && req.query.refname && req.query.refid){
+     var sponsRootID =req.query.refrootID;
+     var sponsID= req.query.refid
+     var sponsName =req.query.refname
+     //console.log("Fro Ref-Register",sponsRootID)
     }else{
       var sponsRootID ="";
       var sponsID= "";
@@ -66,7 +66,7 @@ router.post('/loginUser', async function(req, res, next) {
   try {
     await dbCon.connectDB();
     const user= await db.user.findOne({email:req.body.loginEmail})
-    console.log(user);
+    ///console.log(user);
     await dbCon.closeDB();
     if(user){
       bcrypt.compare(req.body.loginPassword,user.password, async function(err,match){

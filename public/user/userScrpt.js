@@ -1,5 +1,3 @@
-const { urlencoded } = require("express");
-
 $( document ).ready(function() {
     var allredyloginuserID=$("#allredyloginuserID").val();
 
@@ -7,7 +5,7 @@ $( document ).ready(function() {
     var sponsID=$("#sponsID").val();
     var sponsName=$("#sponsName").val();
    
-
+    
     if(allredyloginuserID){
 
         $("#UserPanel").css({"display":"block"});
@@ -19,10 +17,13 @@ $( document ).ready(function() {
         $("#login").css({"display":"none"});
         $("#regit").css({"display":"none"});
 
+        
+
         getUserprofile(allredyloginuserID);
     }else{
 
         if(sponsRootID && sponsID && sponsName){
+           // alert(sponsRootID)
 
             $("#loginPanel").css({"display":"block"});
             $("#login").css({"display":"block"});
@@ -490,7 +491,7 @@ function searchdown(){
     $.post('/user/createRefLink',{id:id},function(data){
 
 
-        var conte='https://moneyremid.com/user?rootID='+data.rootID+'&id='+data.userID+'&name='+data.userName+'';
+        var conte='https://moneyremid.com/user?refrootID='+data.rootID+'&refid='+data.userID+'&refname='+data.userName+'';
         console.log(conte);
         conte=encodeURI(conte);
 
