@@ -71,6 +71,27 @@ function loginClick(){
     $("#RegistrationPanel").css({"display":"none"});
 }
 
+function forgetpassword(){
+    var loginEmail=$("#loginEmail").val().replace(/\s/g, '');
+    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/; 
+    if (reg.test(loginEmail) == false) 
+        {
+            alert('Invalid Email Address');
+            $("#loginEmail").focus();
+            return 
+        }
+        $.post('/user/newPasswordRequest',{loginEmail:loginEmail},function(data){
+            if(data){
+                alert("Your Request" )
+            }else{
+                alert("User Id Not Match");
+            }
+        })
+
+
+    
+}
+
 function regClick(){
     $("#RegistrationPanel").css({"display":"block"});
     $("#loginPanel").css({"display":"none"});
@@ -158,7 +179,7 @@ function searchdown(){
         $.post('/user/creatregColumn',{SponsorRootID:SponsorRootID},function(column){
             //console.log(data);
             //alert(column.length)
-            regColumn=column.length
+            regColumn=column.length+1
                ////Create Root//////
                var channelRoot=''+SponsorRootID+'-'+regColumn+'';
 
@@ -323,8 +344,10 @@ function searchdown(){
                         <p>Bank IFSC: '+user.bankIfsc+'</p>\
                         <p>Bank Branch: '+user.bnakBranch+'</p>\
                         <p id="editBank"></p>\
+                        <p id="changePasw"></p>\
                         <p>\
                             <a  onclick="editbankinit('+user.userID+')" id="editBankBtn" class="btn btn-primary">Edit Bank</a>\
+                            <a  onclick="changePasswordinit('+user.userID+')" id="newPaswBtn" class="btn btn-primary">Change Password</a>\
                         </p>\
                     </div>\
                 </div>\
@@ -354,6 +377,7 @@ function searchdown(){
     </div>\
     <button onclick="editBank('+id+')" class="btn btn-primary">Submit</button>');
     $("#editBankBtn").css({"display":"none"});
+    $("#newPaswBtn").css({"display":"none"});
 
   }
   
@@ -375,6 +399,38 @@ function searchdown(){
 
     
   }
+
+  function changePasswordinit(id){
+   // alert(id)
+    $("#changePasw").html('<legend>Re-Set Login Password</legend>\
+    <div class="form-group">\
+        <label for="">New Password :*</label>\
+        <input type="text" class="form-control" id="newPasw" >\
+    </div>\
+    <button onclick="changePasw('+id+')" class="btn btn-primary">Reset</button>');
+    $("#editBankBtn").css({"display":"none"});
+    $("#newPaswBtn").css({"display":"none"});
+
+  }
+  
+
+  function changePasw(id){
+    
+    var newPasw=$("#newPasw").val().replace(/\s/g, '');
+
+    if(newPasw.length < 6){
+        alert('Password Must be 6 to 18 charecter');
+        $("#newPasw").focus()
+        return
+    } 
+
+    $.post('/user/changePasswor',{
+        id:id,
+        newPasw:newPasw
+    },function(data){
+        logout();
+    })
+ }
 
   function addMember(id){
     $.post('/user/addMember',{id:id},function(user){

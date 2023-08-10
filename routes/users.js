@@ -5,10 +5,13 @@ var dbCon = require('../module/db/con');
 var db=require('../module/db/bdModule')
 var auto_incriment=require('../module/db/autoIncriment');
 
+var smsotp=require('../module/smsotp')
+
 
 var dotenv=require('dotenv').config();
 
 const bcrypt = require('bcrypt');
+const { ExplainVerbosity } = require('mongodb');
 const saltRounds = 10;
 
 
@@ -106,7 +109,7 @@ router.post('/checkSponsor', async function(req, res, next) {
 router.post('/creatregColumn', async function(req, res, next) {
   try {
     await dbCon.connectDB();
-    const user= await db.user.find({rootID: { $regex: '.*' + req.body.SponsorRootID + '.*' , $options: 'i' } } );
+    const user= await db.lavelLedger.find({rootID:req.body.SponsorRootID,lavel:1} );
     await dbCon.closeDB();
     res.json(user);
   }catch (error) {
@@ -219,76 +222,132 @@ var payment = async function(inp){
 }
 
 
+async function tt(){
+  let lavelrootID = "A-1-12-1-87-4-9-45-2-7-140-6";
+  const myArray= lavelrootID.split("-");
+  var rootID="";
+  var L=myArray.length;
+  for(i=1; i < myArray.length; i++) {
+    if(rootID){
+      rootID=''+rootID+'-'+myArray[i-1]+'';
+    }else{
+      rootID=''+myArray[i-1]+'';
+    }
+    L=L-1;
+    const payme= await payment(L); 
+
+      console.log(rootID,L,payme)
+
+  }
+ 
+}
+tt();
+
+
 
 
 router.post('/newPartner', async function(req, res, next) {
   try{
-  await  auto_incriment.auto_incriment("userID").then(async function(inc_val){
+    await  auto_incriment.auto_incriment("userID").then(async function(inc_val){
 
-var loop=req.body.channelRoot; //// B-5-1-1
+    let lavelrootID = req.body.channelRoot;
+    const myArray= lavelrootID.split("-");
+    var rootID="";
+    var L=myArray.length;
+    for(i=1; i < myArray.length; i++) {
+      if(rootID){
+        rootID=''+rootID+'-'+myArray[i-1]+'';
+      }else{
+        rootID=''+myArray[i-1]+'';
+      }
+      L=L-1;
+      const payme= await payment(L); 
+  
+        
+                  // /////// Lavel input//////   
+          await dbCon.connectDB();
+          const Lavel= await db.lavelLedger.findOne({rootID:rootID,lavelrootID:lavelrootID,lavel:L});
+          if(!Lavel){
+            const newlavel= await db.lavelLedger({
+                      userName:req.body.regUserName,
+                      userID:inc_val,
+                      rootID:rootID,
+                      lavelrootID:lavelrootID,
+                      address:req.body.regAddress,
+                      lavel:L,
+                      lavelEarning:payme,
+                      paidEarninyStatus:"Due",
+                    })
+                    await newlavel.save();
+                  }
+          await dbCon.closeDB();
+          
+    }
+    ////End For////
+    ////New Member Add//////
+            bcrypt.hash(req.body.regPassword, saltRounds, async function(err, hash) {
+              await dbCon.connectDB()
+              const user= await db.user({
+              userName:req.body.regUserName,
+              userID:inc_val,
+              rootID:req.body.channelRoot,
+              password:hash,
+              email:req.body.regEmail,
+              address:req.body.regAddress,
+              mobile:req.body.regMobile,
+              panNo:req.body.regPan
+            })
+            await user.save();
+            await dbCon.closeDB();
+            res.json(user)
 
-
-var counter=loop.length;
-var L=0;
-for(i=0; i < counter -1;) {
-  L++;
-    i=i+2;
-    var newRoot=counter-i;
-//console.log(i);
-//console.log(loop.substring(0,newRoot));
-//console.log("L",L);
-const payme= await payment(L);
-//console.log(payme );
-
-/////// Lavel input//////   
-await dbCon.connectDB();
-///const user= await db.user.findOne({$or: [{rootID:req.body.channelRoot},{panNo:req.body.regPan},{email:req.body.regEmail}]});
-const Lavel= await db.lavelLedger.findOne({rootID:loop.substring(0,newRoot),lavelrootID:loop,lavel:L});
-if(!Lavel){
-  const newlavel= await db.lavelLedger({
-            userName:req.body.regUserName,
-            userID:inc_val,
-            rootID:loop.substring(0,newRoot),
-            lavelrootID:loop,
-            address:req.body.regAddress,
-            lavel:L,
-            lavelEarning:payme,
-            paidEarninyStatus:"Due",
           })
-          await newlavel.save();
-        }
-await dbCon.closeDB();
-};
-
-/////// add new user///////
-  bcrypt.hash(req.body.regPassword, saltRounds, async function(err, hash) {
-        await dbCon.connectDB()
-        const user= await db.user({
-        userName:req.body.regUserName,
-        userID:inc_val,
-        rootID:req.body.channelRoot,
-        password:hash,
-        email:req.body.regEmail,
-        address:req.body.regAddress,
-        mobile:req.body.regMobile,
-        panNo:req.body.regPan
-      })
-      await user.save();
-      await dbCon.closeDB();
-      res.json(user)
-      
-})
 
 
   })
 
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-//   try {
-//   bcrypt.hash(req.body.regPassword, saltRounds, function(err, hash) {
-//     auto_incriment.auto_incriment("userID").then(async function(inc_val){
+
+
+
+//   await  auto_incriment.auto_incriment("userID").then(async function(inc_val){
+
+// var loop=req.body.channelRoot; //// B-5-1-1
+
+
+// var counter=loop.length;
+// var L=0;
+// for(i=0; i < counter -1;) {
+//   L++;
+//     i=i+2;
+//     var newRoot=counter-i;
+// //console.log(i);
+// //console.log(loop.substring(0,newRoot));
+// //console.log("L",L);
+// const payme= await payment(L);
+// //console.log(payme );
+
+// /////// Lavel input//////   
+// await dbCon.connectDB();
+// ///const user= await db.user.findOne({$or: [{rootID:req.body.channelRoot},{panNo:req.body.regPan},{email:req.body.regEmail}]});
+// const Lavel= await db.lavelLedger.findOne({rootID:loop.substring(0,newRoot),lavelrootID:loop,lavel:L});
+// if(!Lavel){
+//   const newlavel= await db.lavelLedger({
+//             userName:req.body.regUserName,
+//             userID:inc_val,
+//             rootID:loop.substring(0,newRoot),
+//             lavelrootID:loop,
+//             address:req.body.regAddress,
+//             lavel:L,
+//             lavelEarning:payme,
+//             paidEarninyStatus:"Due",
+//           })
+//           await newlavel.save();
+//         }
+// await dbCon.closeDB();
+// };
+
+/////// add new user///////
+//   bcrypt.hash(req.body.regPassword, saltRounds, async function(err, hash) {
 //         await dbCon.connectDB()
 //         const user= await db.user({
 //         userName:req.body.regUserName,
@@ -303,17 +362,12 @@ await dbCon.closeDB();
 //       await user.save();
 //       await dbCon.closeDB();
 //       res.json(user)
-//       //console.log(req.body)
-      
-
-//       })
 // })
-  
-// } catch (error) {
-//   console.log(error);
-//   return error;
-// }
-
+//   })
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 })
 
 
@@ -419,6 +473,26 @@ router.post('/editBank', async function(req, res, next) {
     console.log(error);
     return error;
   }
+})
+
+
+////////Profile/////////////
+
+router.post('/changePasswor', async function(req, res, next) {
+  
+  bcrypt.hash(req.body.newPasw, saltRounds, async function(err, hash) {
+    await dbCon.connectDB();
+    const user= await db.user.findOneAndUpdate({userID:req.body.id},{$set:{password:hash}});
+    await dbCon.closeDB();
+    if(user){
+     res.send("success")
+    }else{
+     res.send("error")
+    }
+
+  })
+  
+  
 })
 
 
