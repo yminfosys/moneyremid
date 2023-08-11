@@ -280,6 +280,7 @@ function searchdown(){
                 $("#regit").css({"display":"none"});
 
                 getUserprofile(user.userID);
+                location.replace("/user");
             }else{
                 alert("Worng Credential")
             }
