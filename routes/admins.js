@@ -98,24 +98,49 @@ router.post('/SetUserID', async function(req, res, next) {
 });
 
 
-router.get('/resetpassword', async function(req, res, next) {
-  
-  bcrypt.hash(req.query.paw, saltRounds, async function(err, hash) {
-    await dbCon.connectDB();
-    const user= await db.user.findOneAndUpdate({mobile:req.query.mobile},{$set:{password:hash}});
-    await dbCon.closeDB();
 
+router.post('/forgetpasswordlist', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const fgpsw= await db.forgetPasswor.find({status:"New"});
+  
+  await dbCon.closeDB();
+  res.json(fgpsw);
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+  
+});
+
+router.post('/setNewPassword', async function(req, res, next) {
+  bcrypt.hash(req.body.newPassword, saltRounds, async function(err, hash) {
+    await dbCon.connectDB();
+    const user= await db.user.findOneAndUpdate({userID:req.body.userID},{$set:{password:hash}});
+    const fgpsw= await db.forgetPasswor.findOneAndUpdate({userID:Number(req.body.userID),status:"New"},{$set:{status:"Resolve"}});
+   //console.log(fgpsw)
+    await dbCon.closeDB();
     if(user){
-      var dd=JSON.stringify(user)
-      res.send("success"+dd)
+      res.send("ok")
     }else{
       res.send("error")
     }
 
-  })
+  });
+});
+
+
+router.post('/setNewPasswordCalcel', async function(req, res, next) {
+  bcrypt.hash(req.body.newPassword, saltRounds, async function(err, hash) {
+    await dbCon.connectDB();
+    const fgpsw= await db.forgetPasswor.findOneAndUpdate({userID:Number(req.body.userID),status:"New"},{$set:{status:"Cancel"}});
+   
+    await dbCon.closeDB();
+    res.send("ok")
   
-  
-})
+
+  });
+});
 
 
 router.post('/oldUserDetails', async function(req, res, next) {

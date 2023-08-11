@@ -37,6 +37,20 @@ const userSchema = new mongoose.Schema({
 
 var usermodul = mongoose.model('moneyusers', userSchema);
 
+const forgetPasswordSchema = new mongoose.Schema({ 
+    userName:String,
+    userID:Number,
+    rootID:String,
+    email:String,
+    mobile:String,
+    newPassword:String,
+    status:String,
+    daterequest: { type: Date, default: Date.now }
+});
+var forgetPasswordmodul = mongoose.model('moneyforgetpasswords', forgetPasswordSchema);
+
+
+
 const transferSchema = new mongoose.Schema({ 
     userName:String,
     userID:Number,
@@ -90,5 +104,6 @@ module.exports={
     user:usermodul,
     lavelLedger:userLavelLedgermodul,
     transfer:transfermodul,
-    selfTrade:selfTrademodul
+    selfTrade:selfTrademodul,
+    forgetPasswor:forgetPasswordmodul
 }

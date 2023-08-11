@@ -92,6 +92,42 @@ router.post('/loginUser', async function(req, res, next) {
   
 });
 
+router.post('/newPasswordRequest', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.findOne({email:req.body.loginEmail})
+    if(user){
+      ///////Check previous request/////////
+      const fgprexist= await db.forgetPasswor.findOne({userID:user.userID,status:"New"});
+      if(!fgprexist){
+        const forgetPasswor= await db.forgetPasswor({
+          userName:user.userName,
+          userID:user.userID,
+          rootID:user.rootID,
+          email:user.email,
+          mobile:user.mobile,
+          newPassword:req.body.newPasw,
+          status:"New"
+        })
+        await forgetPasswor.save();
+        await dbCon.closeDB();
+        res.send("ok")
+      }else{
+        await dbCon.closeDB();
+        res.send(null);
+      }
+
+    }else{
+      await dbCon.closeDB();
+      res.send(null);
+    }
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+})
+
+
 router.post('/checkSponsor', async function(req, res, next) {
   try {
     await dbCon.connectDB();
@@ -222,26 +258,26 @@ var payment = async function(inp){
 }
 
 
-async function tt(){
-  let lavelrootID = "A-1-12-1-87-4-9-45-2-7-140-6";
-  const myArray= lavelrootID.split("-");
-  var rootID="";
-  var L=myArray.length;
-  for(i=1; i < myArray.length; i++) {
-    if(rootID){
-      rootID=''+rootID+'-'+myArray[i-1]+'';
-    }else{
-      rootID=''+myArray[i-1]+'';
-    }
-    L=L-1;
-    const payme= await payment(L); 
+// async function tt(){
+//   let lavelrootID = "A-1-12-1-87-4-9-45-2-7-140-6";
+//   const myArray= lavelrootID.split("-");
+//   var rootID="";
+//   var L=myArray.length;
+//   for(i=1; i < myArray.length; i++) {
+//     if(rootID){
+//       rootID=''+rootID+'-'+myArray[i-1]+'';
+//     }else{
+//       rootID=''+myArray[i-1]+'';
+//     }
+//     L=L-1;
+//     const payme= await payment(L); 
 
-      console.log(rootID,L,payme)
+//       console.log(rootID,L,payme)
 
-  }
+//   }
  
-}
-tt();
+// }
+// tt();
 
 
 

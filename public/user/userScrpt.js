@@ -80,11 +80,18 @@ function forgetpassword(){
             $("#loginEmail").focus();
             return 
         }
-        $.post('/user/newPasswordRequest',{loginEmail:loginEmail},function(data){
+       var newPasw = prompt("Enter New Password");
+
+       if(newPasw.length < 6){
+            alert('Password Must be 6 to 18 charecter');
+            return
+            
+        } 
+        $.post('/user/newPasswordRequest',{loginEmail:loginEmail,newPasw:newPasw},function(data){
             if(data){
-                alert("Your Request" )
+                alert("Your Request to set New Password is successfully send to Admin Our executive call you soon" )
             }else{
-                alert("User Id Not Match");
+                alert("User Id Not Match / Allredy has pending Request");
             }
         })
 

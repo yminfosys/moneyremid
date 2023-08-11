@@ -173,6 +173,46 @@ function setStartUserid(){
    
     
 }
+function forgetpasswordInit(){
+    $("#forgetpassword").css({"display":"block"});
+    $("#forgetpassword").html('<div  class="col-xs-12 col-sm-12">\
+    <div class="panel panel-danger">\
+        <div class="panel-heading">\
+                <h3 class="panel-title">Forget Password List</h3>\
+        </div>\
+        <div class="panel-body">\
+              <ul class="list-group" id="forgetList">\
+              </ul>\
+        </div>\
+    </div>')
+    $.post('/admin/forgetpasswordlist',{},function(fgpwlist){
+        if(fgpwlist.length >0 ){
+            fgpwlist.forEach(val => {
+                $("#forgetList").append('\
+            <li class="list-group-item">\
+            <span onclick="setNewPassword(\'' +val.userID + '\',\'' + val.newPassword + '\')" class="badge">Resolve</span>\
+            <span onclick="setNewPasswordCancel(\'' +val.userID + '\',\'' + val.newPassword + '\')" class="badge">Cancel</span>\
+            <p>Name: '+val.userName+' <br>Mobile: '+val.mobile+' \
+            <br>User-ID :'+val.userID+' Root-ID:'+val.rootID+' <br>Email : '+val.email+'</p>\
+            </li>')  
+            });
+          
+        }
+    })
+
+}
+
+function setNewPassword(userID,newPassword){
+$.post('/admin/setNewPassword',{userID:userID,newPassword:newPassword},function(data){
+    forgetpasswordInit();
+})
+}
+
+function setNewPasswordCancel(userID,newPassword){
+    $.post('/admin/setNewPasswordCalcel',{userID:userID},function(data){
+        forgetpasswordInit();
+    })
+}
 
 function replaseidInit(){
     $("#replaceID").css({"display":"block"})
