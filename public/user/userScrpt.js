@@ -504,8 +504,12 @@ function searchdown(){
         </li>');
         $("#treeList").html("")
         data.Mytree.forEach(val => {
+            var cstClass="list-group-item-success";
+                if(val.paidEarninyStatus=="Due"){
+                    cstClass= "list-group-item-info";
+                }
             
-            $("#treeList").append('<li class="list-group-item">'+val.userName+'<br/>ID: MR-'+val.userID+'</li>')
+            $("#treeList").append('<li class="list-group-item '+cstClass+'">'+val.userName+'<br/>ID: MR-'+val.userID+'</li>')
             
         });
         $("#treeList").append('<li style="" class="list-group-item"> \

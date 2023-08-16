@@ -158,17 +158,25 @@ router.post('/oldUserDetails', async function(req, res, next) {
   
 });
 
-router.post('/updateUser', async function(req, res, next) {
+
+
+router.post('/paymentSearchID', async function(req, res, next) {
   try {
     await dbCon.connectDB();
-    const user= await db.user.findOneAndUpdate({userID:req.body.userIDReplace},{$set:{
-      userName:req.body.nameReplace,
-      email:req.body.emailReplace,
-      address:req.body.addressReplace,
-      mobile:req.body.mobileReplace,
-      panNo:req.body.panReplace
-    }});
+    const user= await db.user.findOne({userID:req.body.userID});
+    const lavel= await db.lavelLedger.find({lavelrootID:user.rootID});
+  await dbCon.closeDB();
+  res.json({user:user,lavel:lavel});
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
   
+});
+router.post('/paymentrootIDdetails', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    const user= await db.user.findOne({rootID:req.body.rootID});
   await dbCon.closeDB();
   res.json(user);
   }catch (error) {
@@ -177,6 +185,28 @@ router.post('/updateUser', async function(req, res, next) {
   }
   
 });
+
+
+
+// router.post('/updateUser', async function(req, res, next) {
+//   try {
+//     await dbCon.connectDB();
+//     const user= await db.user.findOneAndUpdate({userID:req.body.userIDReplace},{$set:{
+//       userName:req.body.nameReplace,
+//       email:req.body.emailReplace,
+//       address:req.body.addressReplace,
+//       mobile:req.body.mobileReplace,
+//       panNo:req.body.panReplace
+//     }});
+  
+//   await dbCon.closeDB();
+//   res.json(user);
+//   }catch (error) {
+//     console.log(error);
+//     return error;
+//   }
+  
+// });
 
 
 
