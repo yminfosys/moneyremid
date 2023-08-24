@@ -470,7 +470,7 @@ function searchdown(){
         $("#treeHead").html(' <li class="list-group-item active">\
         <span class="badge">'+data.Mytree.length+'</span>\
         <span class="badge">Lavel-'+lavel+'</span>\
-        '+data.user.userName+'\
+        '+data.user.userName+' [ Total : '+data.totalChain+' ]\
         </li>\
         <li class="list-group-item" style="height: 6vh; margin-top:2px;">\
         <div class="col-xs-8">\
@@ -505,9 +505,9 @@ function searchdown(){
         $("#treeList").html("")
         data.Mytree.forEach(val => {
             var cstClass="list-group-item-success";
-                if(val.paidEarninyStatus=="Due"){
-                    cstClass= "list-group-item-info";
-                }
+            if(val.paidEarninyStatus=="Due"){
+                cstClass= "list-group-item-info";
+            }
             
             $("#treeList").append('<li class="list-group-item '+cstClass+'">'+val.userName+'<br/>ID: MR-'+val.userID+'</li>')
             

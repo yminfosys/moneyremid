@@ -267,7 +267,7 @@ function searchID(){
                     cstClass= "list-group-item-info";
                 }
               $("#rootLavelList").append('<li class="list-group-item '+cstClass+'">\
-              <span onclick="showpaymentDetails(\''+val.rootID+'\',\''+val.lavelrootID+'\',\''+val.lavel+'\')" id="payBtn'+val.rootID+'" class="badge" style="color: red; padding: 10px; font-size: medium;">Details</span>\
+              <span id="'+val.rootID+'show" onclick="showpaymentDetails(\''+val.rootID+'\',\''+val.lavelrootID+'\',\''+val.lavel+'\')" id="payBtn'+val.rootID+'" class="badge" style="color: red; padding: 10px; font-size: medium;">Details</span>\
               RootID: '+val.rootID+'  [ L-'+val.lavel+' ]\
               <p>Rs. '+val.lavelEarning+'</p>\
               <div id="payment-detals-'+val.rootID+'">\
@@ -283,14 +283,20 @@ function showpaymentDetails(rootID,lavelrootID,lavel){
 $.post('/admin/paymentrootIDdetails',{rootID:rootID},function(user){
 console.log(user)
     $("#payment-detals-"+rootID+"").html('<p>Payment Details</p>\
-    <p>Name: '+user.userName+'<br>ID: '+user.userID+'\
+    <p>Name: '+user.userName+'<br>ID: '+user.userID+'<br>Mobile:'+user.mobile+'\
     <p>Bank Name: '+user.bankName+' <br>Account no: '+user.bankAccount+' <br>IFSC Code: '+user.bankIfsc+'<br>Branch: '+user.bnakBranch+'</p>\
-    <button onclick="markaspaid(\''+rootID+'\',\''+lavelrootID+'\',\''+lavel+'\')" type="button" class="btn btn-sm btn-primary">Mark As Paid</button>')
+    <button id="'+rootID+'" onclick="markaspaid(\''+rootID+'\',\''+lavelrootID+'\',\''+lavel+'\')" type="button" class="btn btn-sm btn-primary">Mark As Paid</button>')
 })
 }
 
-function markaspaid(){
-    searchID(); 
+function markaspaid(rootID,lavelrootID,lavel){
+    
+    //
+    $.post('/admin/markaspaid',{rootID:rootID, lavelrootID:lavelrootID,lavel:lavel},function(user){
+        alert("Payment Status Updated Successfully") 
+        $("#"+rootID+"").attr("disabled", true);
+    })
+
 }
 
 

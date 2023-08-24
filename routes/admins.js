@@ -186,6 +186,20 @@ router.post('/paymentrootIDdetails', async function(req, res, next) {
   
 });
 
+router.post('/markaspaid', async function(req, res, next) {
+  try {
+    await dbCon.connectDB();
+    ////rootID:rootID, lavelrootID:lavelrootID,lave:lave
+    const lavel= await db.lavelLedger.findOneAndUpdate({rootID:req.body.rootID,lavelrootID:req.body.lavelrootID,lavel:req.body.lavel},{$set:{paidEarninyStatus:"Paid"}});
+  await dbCon.closeDB();
+  res.json(lavel);
+  }catch (error) {
+    console.log(error);
+    return error;
+  }
+  
+});
+
 
 
 // router.post('/updateUser', async function(req, res, next) {

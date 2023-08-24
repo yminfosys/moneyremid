@@ -554,14 +554,18 @@ router.post('/getTree', async function(req, res, next) {
     const user= await db.user.findOne({userID:req.body.id});
     // const Mytree=await db.user.find({rootID: { $regex: '.*' + user.rootID + '.*' , $options: 'i' } } );
     const Mytree=await db.lavelLedger.find({rootID:user.rootID,lavel:req.body.lavel } );
+    const number = await  db.lavelLedger.countDocuments({rootID:user.rootID});
+      
     await dbCon.closeDB();
    // console.log("My Tree",Mytree)
-    res.send({user:user,Mytree:Mytree})
+    res.send({user:user,Mytree:Mytree,totalChain:number})
   }catch (error) {
     console.log(error);
     return error;
   }
 })
+
+
 
 
 ////////REf Link/////////////
