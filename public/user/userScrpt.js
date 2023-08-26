@@ -58,18 +58,31 @@ $( document ).ready(function() {
         
     }
 
-    // if("<%=ref%>"){
-    //     // alert("<%=ref.name%>") 
-    //      regClick();
-    //      $("#loginPanel").css({"display":"none"});
-    //  }
+    ///////For Password Toggle/////////
+
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#regPassword');
+  
+    togglePassword.addEventListener('click', function (e) {
+      // toggle the type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+  });
 
 })
+
+
 
 function loginClick(){
     $("#loginPanel").css({"display":"block"});
     $("#RegistrationPanel").css({"display":"none"});
 }
+
+
+
+
 
 function forgetpassword(){
     var loginEmail=$("#loginEmail").val().replace(/\s/g, '');
