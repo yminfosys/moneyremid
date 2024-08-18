@@ -16,10 +16,6 @@ router.get('/', function(req, res, next) {
 
 
 
-
-
-
-
 router.post('/checkuserexist', async function(req, res, next) {
   try {
   await dbCon.connectDB()

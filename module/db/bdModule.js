@@ -37,6 +37,17 @@ const userSchema = new mongoose.Schema({
 
 var usermodul = mongoose.model('moneyusers', userSchema);
 
+const adminSchema = new mongoose.Schema({ 
+    userID:Number,
+    password:String,
+    address:String,
+    mobile:String,
+    type:String,
+    status:String,
+});
+
+var adminmodul = mongoose.model('moneyadmins', adminSchema);
+
 const forgetPasswordSchema = new mongoose.Schema({ 
     userName:String,
     userID:Number,
@@ -72,6 +83,7 @@ const userLavelLedgerSchema = new mongoose.Schema({
     lavel:String,
     lavelEarning:String,
     paidEarninyStatus:String,
+    paymentScrnSort:String,
     paydate: { type: Date }
 });
 var userLavelLedgermodul = mongoose.model('moneyuserlavelledger', userLavelLedgerSchema);
@@ -105,5 +117,6 @@ module.exports={
     lavelLedger:userLavelLedgermodul,
     transfer:transfermodul,
     selfTrade:selfTrademodul,
-    forgetPasswor:forgetPasswordmodul
+    forgetPasswor:forgetPasswordmodul,
+    admin:adminmodul
 }

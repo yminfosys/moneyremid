@@ -1,3 +1,32 @@
+$( document ).ready(function() {
+    var allredyloginuserID=$("#allredyloginuserID").val();
+    $("#allUser").css({"display":"block"})
+    $("#sidebar-waper").css({"display":"none"})
+    $("#allUser").html('<div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">\
+            <div class="panel panel-success">\
+                  <div class="panel-heading">\
+                        <h3 class="panel-title">Login</h3>\
+                  </div>\
+                  <div class="panel-body">\
+                        <div class="form-group">\
+                            <label>Username</label>\
+                                <input type="text" name="" id="loginEmail" class="form-control" placeholder="User Email">\
+                        </div>\
+                        <div class="form-group">\
+                            <label>Password</label>\
+                                <input type="password" name="" id="loginPassword" class="form-control" placeholder="Password">\
+                        </div>\
+                        <button onclick="loginProcess()" type="button" class="btn btn-primary">Login</button>\
+                        <button onclick="forgetpassword()" type="button" class="btn btn-sm-square btn-danger" style="margin-left: 4vh;">Forget Password</button>\
+                  </div>\
+            </div>\
+    </div>')
+
+})
+    
+
+
+
 function newChannelInit(){
     $("#newChannel").html('<div  class="col-xs-12 col-sm-12">\
     <div class="panel panel-success">\
